@@ -1,0 +1,183 @@
+name: MeerK40t (Macintosh)
+##Options for VM
+##macos-10.15 or macos-latest
+##macos-11
+##
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build-macos11:
+    runs-on: macos-11
+    steps:
+    - name: Checkout meerk40t
+      uses: actions/checkout@v4
+##    - name: Set up Python 3.9
+##      uses: actions/setup-python@v5
+##      with:
+##        python-version: 3.9
+    - name: Alternative Python Install if needed
+      run: |
+        wget https://www.python.org/ftp/python/3.8.10/python-3.8.10-macosx10.9.pkg
+        sudo installer -pkg python-3.8.10-macosx10.9.pkg -target /
+    - name: Install Mac dependencies
+      run: |
+        which curl
+        python3 -V
+        which wget
+        which git
+        which gcc
+        which xcode-select
+        which cmake
+        which pkgbuild
+        which productsign
+        which plutil
+        which codesign
+        which xcrun
+        which xcode-select
+        ls
+        git clone https://github.com/libusb/libusb.git
+        cd libusb
+        ./autogen.sh && ./configure && make && sudo make install
+        cd ..
+        curl --remote-name http://www.ijg.org/files/jpegsrc.v9c.tar.gz
+        tar -zxvf jpegsrc.v9c.tar.gz
+        cd jpeg-9c
+        ./configure && make && sudo make install
+        cd ..
+        ## git clone https://github.com/numpy/numpy.git
+        ## cd numpy
+        ## python3.8 -m pip install .
+        ## cd ..
+
+    - name: Ensure latest pip and meerk40t-camera
+      run: |
+        python3.8 -m pip install --upgrade pip
+        python3.8 -m pip install wheel setuptools
+        python3.8 -m pip install --no-use-pep517 pyinstaller==4.3
+        python3.8 -m pip install numpy==1.23.5
+        python3.8 -m pip install pyusb
+        python3.8 -m pip install potracer
+        python3.8 -m pip install pillow==9.5.0
+        python3.8 -m pip install wxPython
+        python3.8 -m pip install ezdxf
+        python3.8 -m pip install pyserial
+        python3.8 -m pip install bitarray
+        python3.8 -m pip install scipy==1.10.0
+        python3.8 -m pip install pyclipr
+        python3.8 -m pip install numba
+        python3.8 -m pip install .
+        python3.8 -m pip install meerk40t-camera opencv-python-headless==4.5.3.56
+        python3.8 -m pip install meerk40t-barcodes
+
+    - name: pip list
+      run: |
+          python3.8 -m pip list
+
+    - name: Build meerk40t
+      id: build
+      run: |
+        ## git clone https://github.com/meerk40t/meerk40t.git
+        ## cd meerk40t
+        ## git pull
+        git clone https://github.com/ronaldoussoren/py2app.git
+        cd py2app
+        git checkout master
+        git pull
+        python3.8 -m pip install .
+        cd ..
+            ##Set bundle version
+            ##Download the extra files here meerk40t.icns entitlements.plist setup_mac.py
+            ##May need to compare extras_required vs. current version of setup.py
+            ##Unpack inside the meerk40t directory
+        cp .github/workflows/mac/setup_mac.py setup_mac.py
+        cp .github/workflows/mac/entitlements.plist entitlements.plist
+        cp .github/workflows/mac/meerk40t.icns meerk40t.icns
+        cp .github/workflows/mac/libusb-1.0.dylib libusb-1.0.dylib
+        VERSION=$(python3.8 meerk40t.py -V)
+        MKVERSION=$(echo $VERSION | cut -d" " -f 2)
+        sed -i "" "s|0.0.0|$MKVERSION|g" setup_mac.py
+
+        ## Export env variable to github actions scope to use in tag_name of upload release
+        ## echo "::set-output name=mkversion::$(echo $MKVERSION)"
+        echo "mkversion=$(echo $MKVERSION)" >> $GITHUB_OUTPUT
+        ## python3.8 setup_mac.py py2app --dylib-excludes /usr/local/lib/libssl.1.1.dylib,/usr/local/lib/libcrypto.1.1.dylib,/Users/runner/hostedtoolcache/Python/3.9.7/x64/lib/python3.9/site-packages/PIL/.dylibs/libfreetype.6.dylib,/Users/runner/hostedtoolcache/Python/3.9.7/x64/lib/python3.9/site-packages/PIL/.dylibs/liblzma.5.dylib --frameworks libusb-1.0.dylib
+        mv meerk40t.py mk40t.py
+        python3.8 -m PyInstaller --hidden-import wx._adv --hidden-import wx._xml --hidden-import meerk40t --windowed --noconfirm -i meerk40t.icns --add-data 'locale/:locale/' --name MeerK40t mk40t.py
+        mv mk40t.py meerk40t.py
+        rm -rf dist/MeerK40t
+        sed -i "" "s|$MKVERSION|0.0.0|g" setup_mac.py
+        ## Backwards compatibility
+        rm dist/MeerK40t.app/Contents/MacOS/libusb-1.0.dylib
+        cp libusb-1.0.dylib dist/MeerK40t.app/Contents/MacOS/libusb-1.0.dylib
+        ## plutil -insert NSRequiresAquaSystemAppearance -bool NO dist/meerk40t.app/Contents/Info.plist
+        plutil -insert NSRequiresAquaSystemAppearance -bool NO dist/meerk40t.app/Contents/Info.plist
+        plutil -insert CFBundleDevelopmentRegion -string en dist/meerk40t.app/Contents/Info.plist
+        plutil -insert CFAppleHelpAnchor -string YES dist/meerk40t.app/Contents/Info.plist
+        plutil -replace CFBundleIdentifier -string org.tatarize.MeerK40t dist/meerk40t.app/Contents/Info.plist
+        plutil -replace CFBundleShortVersionString -string $MKVERSION dist/meerk40t.app/Contents/Info.plist
+        plutil -insert CFBundleSupportedPlatforms -string MacOSX dist/meerk40t.app/Contents/Info.plist
+        ## plutil -insert CFBundleTypeExtensions -string "*" dist/meerk40t.app/Contents/Info.plist
+        plutil -insert CFBundleTypeRole -string Editor dist/meerk40t.app/Contents/Info.plist
+        plutil -insert CFBundleVersion -string $MKVERSION dist/meerk40t.app/Contents/Info.plist
+        plutil -insert LSApplicationCategoryType -string public.app-category.utilities dist/meerk40t.app/Contents/Info.plist
+        ## plutil -insert LSFileQuarantineEnabled -string YES dist/meerk40t.app/Contents/Info.plist
+        ## plutil -insert NSAppleScriptEnabled -bool NO dist/meerk40t.app/Contents/Info.plist
+        plutil -insert NSHumanReadableCopyright -string "Copyright © 2019-2021 MeerK40t Developers, MIT License" dist/meerk40t.app/Contents/Info.plist
+
+        ## plutil -insert  -string  dist/meerk40t.app/Contents/Info.plist
+        ## plutil -replace  -string  dist/meerk40t.app/Contents/Info.plist
+        SIG="-"
+        plutil -replace CFBundleSupportedPlatforms -xml "<array><string>MacOSX</string></array>" dist/MeerK40t.app/Contents/Info.plist
+
+        ## Fix the numpy 32 bit issue inside the app bundle - or install numpy from source.
+        ## lipo dist/MeerK40t.app/Contents/MacOS/libgcc_s.1.dylib -remove i386 -output dist/MeerK40t.app/Contents/MacOS/libgcc_s_new.1.dylib
+        ## rm dist/MeerK40t.app/Contents/MacOS/libgcc_s.1.dylib
+        ## mv dist/MeerK40t.app/Contents/MacOS/libgcc_s_new.1.dylib dist/MeerK40t.app/Contents/MacOS/libgcc_s.1.dylib
+
+        echo "Codesign for GITHUB"
+        codesign -s $SIG --force --verbose=4 --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/MeerK40t.app/Contents/MacOS/*.zip
+
+        codesign -s $SIG --force --verbose=4 --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/MeerK40t.app/Contents/MacOS/wx/*.so
+        codesign -s $SIG --force --verbose=4 --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/MeerK40t.app/Contents/MacOS/Python
+        codesign -s $SIG --force --verbose=4 --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/MeerK40t.app/Contents/MacOS/PIL/*.so
+        codesign -s $SIG --force --verbose=4 --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/MeerK40t.app/Contents/MacOS/numpy/random/*.so
+        codesign -s $SIG --force --verbose=4 --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/MeerK40t.app/Contents/MacOS/numpy/linalg/*.so
+        codesign -s $SIG --force --verbose=4 --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/MeerK40t.app/Contents/MacOS/numpy/fft/*.so
+        codesign -s $SIG --force --verbose=4 --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/MeerK40t.app/Contents/MacOS/numpy/core/*.so
+        codesign -s $SIG --force --verbose=4 --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/MeerK40t.app/Contents/MacOS/lib-dynload/*.so
+        codesign -s $SIG --force --verbose=4 --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/MeerK40t.app/Contents/MacOS/ezdxf/acc/*.so
+        codesign -s $SIG --force --verbose=4 --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/MeerK40t.app/Contents/MacOS/cv2/*.so
+        codesign -s $SIG --force --verbose=4 --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/MeerK40t.app/Contents/MacOS/*.dylib
+        ## codesign -s $SIG --force --verbose=4 --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/MeerK40t.app/Contents/MacOS/*.so
+        codesign -s $SIG --force --verbose=4 --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/MeerK40t.app/Contents/MacOS/MeerK40t
+
+        codesign -s $SIG --force --verbose=4 --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/MeerK40t.app
+        ## codesign -s $SIG --deep --timestamp --entitlements entitlements.plist -i org.tatarize.MeerK40t -o runtime --arch x86_64 dist/meerk40t.app
+
+        echo "DMG Build..."
+        hdiutil create -volname "MeerK40t Mac" -srcfolder dist -ov MeerK40t_unsigned.dmg
+            ## GUI function check - Fails on runner (security settings).
+        ## open dist/MeerK40t.app
+            ## Binary bundle CLI function check - Fails on runner (security settings).
+        ##. dist/MeerK40t.app/Contents/MacOS/MeerK40t -V
+            ##I don't do this part; mv dist/meerk40t dist/MeerK40t-Ubuntu-Latest
+
+    - name: Directory contents
+      run: |
+        cd ..
+        ls
+        cd ..
+        ls
+
+# Switched to using softprops/action-gh-release@v1
+# because it supports uploading to existing release based on current tag.
+    - name: Upload Release Assets
+      id: release
+      uses: softprops/action-gh-release@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        files: |
+          MeerK40t_unsigned.dmg

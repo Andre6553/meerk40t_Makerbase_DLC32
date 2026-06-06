@@ -1,0 +1,31 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Local Python venvs
+.venv/
+venv/
+**/.venv/
+
+# Meerkat edit backups (rotate beside files)
+*.bak.1
+*.bak.2
+*.bak.3
+**/*.bak.1
+**/*.bak.2
+**/*.bak.3
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# MeerK40t clone — separate repo: https://github.com/Andre6553/meerk40t
+# Clone into meerk40t/ after pulling this workspace.
+meerk40t/
+
+# OS / editor
+Thumbs.db
+Desktop.ini
+.DS_Store

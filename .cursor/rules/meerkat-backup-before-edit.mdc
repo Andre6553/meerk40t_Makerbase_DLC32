@@ -1,0 +1,40 @@
+---
+description: Mandatory file backup before any code or config edits in this workspace
+alwaysApply: true
+---
+
+# Meerkat — backup before every edit
+
+Before **creating or changing** any project file (code, docs, Cursor rules), the agent **must** rotate a local backup **first**. Do not skip this for “small” edits.
+
+## What to back up
+
+| Path | Backup method |
+|------|----------------|
+| `meerk40t/**/*.py` and other source under `meerk40t/` | Rotate **`.bak.1` → `.bak.2` → `.bak.3`** (keep 3) |
+| `docs/meerk40t/**` | Same `.bak.N` rotation beside the file |
+| `.cursor/rules/*.mdc` | Same `.bak.N` rotation beside the file |
+
+## PowerShell (run once per file, before editing)
+
+```powershell
+$p = 'C:\Users\User\Ai Projects\meerkat\path\to\file.py'
+$b1 = "$p.bak.1"
+$b2 = "$p.bak.2"
+$b3 = "$p.bak.3"
+if (Test-Path $b3) { Remove-Item $b3 -Force }
+if (Test-Path $b2) { Move-Item $b2 $b3 -Force }
+if (Test-Path $b1) { Move-Item $b1 $b2 -Force }
+Copy-Item $p $b1 -Force
+```
+
+## Agent checklist
+
+1. **Backup** target file(s).
+2. **Edit** canonical file only.
+3. **Update** `docs/meerk40t/` when behavior or workflows change (see `meerk40t-knowledge-base.mdc` §5).
+
+## Related
+
+- MeerK40t deep-dive / doc index: `meerk40t-knowledge-base.mdc`
+- Johan / Icemaker / other rules use their own backup policies when editing **those** canonical paths outside `meerkat/`.

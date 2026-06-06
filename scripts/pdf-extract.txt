@@ -1,0 +1,41 @@
+﻿--- page 6 ---
+ 
+6 
+Γàú.  TF Card Slot 
+ 
+ 
+TF card slot: For offline engraving file storage. 
+Suggest SD card: Class4 or Class10; 4~16G memory; Fat32 format. File format support: .NC; .GC; .GCODE 
+ 
+ 
+ 
+Γàñ∩╝ÄReset button external port (emergency stop button) 
+ 
+ 
+Reset button external port: used to reset MCU or as an emergency stop button. 
+ 
+ΓàÑ.  Motor Drive Settings 
+ 
+ 
+1. Plug-in drive and micro-step setting 
+Drive socket PINOUT 
+--- page 7 ---
+ 
+7 
+ 
+ 
+Micro-step setting 
+ 
+ 
+2. External high current drive connection 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+External drive interface: 
+ 
+

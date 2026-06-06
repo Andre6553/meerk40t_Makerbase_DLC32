@@ -1,0 +1,58 @@
+---
+description: MeerK40t — consult local docs first; extend docs when gaps exist
+alwaysApply: true
+---
+
+# MeerK40t knowledge base (this workspace)
+
+When the user’s question is about **MeerK40t** (the laser app), the **clone** under `meerk40t/`, drivers (Lihuiyu, GRBL, Ruida, Balor), **GUI**, **console**, **planner/spool**, or **how the code works** here:
+
+## 1. Look up first
+
+- Read relevant files under **`docs/meerk40t/`** (start with **`docs/meerk40t/README.md`** for the index).
+- Search those docs and the **`meerk40t/`** tree (e.g. `rg`, semantic search, or read-by-path) before answering from memory alone.
+
+## 2. If the topic is missing or too thin
+
+- **Deep dive** the source (and upstream `README` / wiki pointers only as secondary).
+- **Update the knowledge base**: add a new **`docs/meerk40t/NN-short-topic.md`** (next free number after existing files) **or** extend the best existing doc with a new section—whichever keeps navigation clearer.
+- **Update `docs/meerk40t/README.md`** contents table when you add a new file.
+- Keep prose **accurate and scoped**; point to file paths in the clone for details instead of copying huge code blocks.
+
+## 3. When this rule does *not* apply
+
+- General Cursor/editor questions, unrelated repos, or chats with **no** MeerK40t / `meerk40t` / `docs/meerk40t` tie-in—do not force doc updates.
+
+## Paths (authoritative in this project)
+
+- Clone: `meerk40t/` (repo root)
+- Docs: `docs/meerk40t/`
+
+## 4. Pre-edit backups (mandatory)
+
+Follow **`.cursor/rules/meerkat-backup-before-edit.mdc`** before **any** edit to `meerk40t/`, `docs/meerk40t/`, or `.cursor/rules/`. Rotate **`.bak.1` → `.bak.2` → `.bak.3`** (keep three snapshots).
+
+From PowerShell (run in the project environment; replace `$p` with the file you are about to edit):
+
+```powershell
+$p = 'C:\full\path\to\file.py'
+$b1 = "$p.bak.1"
+$b2 = "$p.bak.2"
+$b3 = "$p.bak.3"
+if (Test-Path $b3) { Remove-Item $b3 -Force }
+if (Test-Path $b2) { Move-Item $b2 $b3 -Force }
+if (Test-Path $b1) { Move-Item $b1 $b2 -Force }
+Copy-Item $p $b1 -Force
+```
+
+This yields `file.py.bak.1` (newest snapshot), `.bak.2`, `.bak.3`; the previous `.bak.3` is deleted when rotating.
+
+## 5. README and docs when code changes
+
+When you change **behavior, defaults, or workflows** under `meerk40t/` in this workspace (or other project code the user relies on), **update documentation in the same change batch** so READMEs stay truthful.
+
+- **Index:** Update **`docs/meerk40t/README.md`** — add or refresh the **Recent local changes** pointer and the **Contents** table when you add a new topic file.
+- **Detail:** Add or extend a topic under **`docs/meerk40t/`** (for example **`15-meerkat-local-changes.md`**) with what changed, which files, user-visible behavior, and known limits.
+- **Root README:** If the workspace root gains or already has a **`README.md`** that describes this project, update it when those entry-level docs should mention the change.
+
+Do not merge code changes without the matching doc/README updates when the change affects how MeerK40t behaves for the user.

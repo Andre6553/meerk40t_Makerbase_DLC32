@@ -1,0 +1,96 @@
+---
+description: Andre's MKS DLC32 GRBL EEPROM — authoritative board settings, homing, bed size
+alwaysApply: true
+---
+
+# MKS DLC32 — Andre's confirmed GRBL EEPROM
+
+**Machine:** K40 CO2, MKS DLC32 (Grbl 1.1h), Meerkat workspace.  
+**Saved:** 2026-06-05 from live `$$` on the board.  
+**Canonical file (Andre):** `Firmware Settings/settings` — read this first if EEPROM values may have changed.  
+**Detail doc:** `docs/meerk40t/19-dlc32-eeprom-settings.md`
+
+When advising on homing, limits, jog direction, bed size, or GRBL alarms on this machine, **use these values** — do not guess from generic GRBL docs.
+
+## Homing procedure
+
+1. `$X` then `?` — **`Pn:` must be empty** at rest  
+2. `$HY` (wait `ok`) then `$HX` (wait `ok`)  
+3. **Never `$H`** (both axes at once) on this machine  
+4. Expect `MPos:0,0,0` after successful homing
+
+## Direction (verified)
+
+| Setting | Value | Meaning |
+|---------|-------|---------|
+| `$3` | **0** | Jog + touch screen — do not change if jog is correct |
+| `$23` | **1** | Homing only — Y + X homing both correct |
+
+## Bed / travel
+
+- **`$130=405`** — X max travel (mm)  
+- **`$131=285`** — Y max travel (mm)  
+- MeerK40t device bed: match **`$130`/`$131`**; home corner **top-left**, **Flip Y on**
+
+## Full EEPROM (`$$` — authoritative)
+
+```text
+$0=10
+$1=25
+$2=0
+$3=0
+$4=0
+$5=0
+$6=0
+$10=1
+$11=0.010
+$12=0.002
+$13=0
+$20=0
+$21=0
+$22=1
+$23=1
+$24=200.000
+$25=500.000
+$26=250.000
+$27=5.000
+$28=1000.000
+$30=1000.000
+$31=0.000
+$32=1
+$49=0
+$38=0
+$40=1
+$43=0
+$100=157.210
+$101=159.600
+$102=100.000
+$103=100.000
+$104=100.000
+$105=100.000
+$110=5000.000
+$111=5000.000
+$112=6000.000
+$113=1000.000
+$114=1000.000
+$115=1000.000
+$120=2400.000
+$121=2400.000
+$122=3500.000
+$123=200.000
+$124=200.000
+$125=200.000
+$130=405.000
+$131=285.000
+$132=300.000
+$133=300.000
+$134=300.000
+$135=300.000
+```
+
+## Notes for agents
+
+- **`$20=0` / `$21=0`** in this snapshot = limits off while testing; enable **`$20=1`** and **`$21=1`** when travel is trusted.  
+- Limit wiring: **X−** and **Y+** switches only; jumper unused **X+**, **Y−**, **Z±**, **Probe** (GND–S).  
+- TCP default: `192.168.10.90:8080` — only one client at a time (ESP32-WEB or MeerK40t).  
+- If jog OK but homing wrong: change **`$23` only**, not **`$3`**.

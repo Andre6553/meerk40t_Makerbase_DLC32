@@ -1,0 +1,33 @@
+# GRBL `/settings` — annotate EEPROM dump (Andre DLC32)
+
+When the user says **`/settings`**, pastes a **`$$` dump**, or asks to annotate **`Firmware Settings/settings`**:
+
+## Workflow
+
+1. **Read** canonical values from `Firmware Settings/settings` (or parse pasted `$N=value` lines).
+2. **Do not change any values** unless the user explicitly asks to edit EEPROM.
+3. **Sort** settings numerically by `$` number (`$0`, `$1`, … `$10`, … `$100`, …).
+4. **Look up** unit, parameter name, and description (ESP32-WEB / standard Grbl table; see `settings-annotated.md` for lookup copy).
+5. **Write inline annotations into** `Firmware Settings/settings` using this line format (values unchanged):
+   `-->	$N=value | unit | parameter | description`
+6. Sort lines numerically by `$` number. Keep header `<--$$` and footer `ok` lines.
+
+## Canonical paths
+
+| File | Role |
+|------|------|
+| `Firmware Settings/settings` | Authoritative values **with inline** unit / parameter / description |
+| `Firmware Settings/settings-annotated.md` | Optional markdown table copy (regenerate from `settings` if needed) |
+| `docs/meerk40t/19-dlc32-eeprom-settings.md` | MeerK40t workflow notes (homing, `$3` vs `$23`, bed size) |
+
+## Extensions without ESP32-WEB descriptions
+
+For **`$28`**, **`$38`**, **`$40`**, **`$43`**, **`$49`**: label as *ESP32-WEB extension* unless the user supplies a new description from the web UI.
+
+## Paste-only input
+
+If the user pastes only values (no `settings` file update):
+
+- Parse all `$N=value` lines.
+- Build the annotated table.
+- Offer to write parsed lines back to `Firmware Settings/settings` **only if asked**.

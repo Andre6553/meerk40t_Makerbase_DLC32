@@ -1,0 +1,84 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches: [main, legacy6, legacy7, legacy8]
+    paths:
+      - '**.py'
+      - '.github/workflows/codeql*.yml'
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [main, legacy6, legacy7, legacy8]
+    paths:
+      - '**.py'
+      - '.github/workflows/codeql*.yml'
+  schedule:
+    - cron: '0 23 * * 5'
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  analyze:
+    name: CodeQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-18.04]
+        python-version: [3.9]
+
+    steps:
+    - name: Checkout ${{ github.ref }}
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Identify precise Python version
+      id: full-python-version
+      shell: bash
+      run: echo ::set-output name=version::$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info))")
+
+    - name: Cache Python env for ${{ matrix.os }}-py${{ steps.full-python-version.outputs.version }}
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.pythonLocation }}
+        key: ${{ matrix.os }}-py${{ steps.full-python-version.outputs.version }}-${{ hashFiles('requirements.txt') }}
+
+    - name: Install Python dependencies
+      run: |
+        python3 -m pip install --upgrade --upgrade-strategy eager pip setuptools wheel babel
+        if [ -f requirements-nogui.txt ]; then pip install --upgrade --upgrade-strategy eager -r requirements-nogui.txt; fi
+
+    - name: List environment
+      env:
+        GITHUB_CONTEXT: ${{ toJSON(github) }}
+        JOB_CONTEXT: ${{ toJSON(job) }}
+        STEPS_CONTEXT: ${{ toJSON(steps) }}
+        RUNNER_CONTEXT: ${{ toJSON(runner) }}
+        STRATEGY_CONTEXT: ${{ toJSON(strategy) }}
+        MATRIX_CONTEXT: ${{ toJSON(matrix) }}
+      run: |
+        pip list
+        env
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: python
+        # If you wish to specify custom queries, you can do so here or in a config file.
+        # By default, queries listed here will override any specified in a config file.
+        # Prefix the list here with "+" to use these queries and those in the config file.
+        # queries: ./path/to/local/query, your-org/your-repo/queries@main
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
