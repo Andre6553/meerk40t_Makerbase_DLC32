@@ -21,9 +21,9 @@ __pycache__/
 *.py[cod]
 *.pyo
 
-# MeerK40t clone — separate repo: https://github.com/Andre6553/meerk40t
-# Clone into meerk40t/ after pulling this workspace.
-meerk40t/
+# MeerK40t clone at repo root — separate repo: https://github.com/Andre6553/meerk40t
+# Clone into meerk40t/ after pulling this workspace. (/ prefix = root only, not docs/meerk40t/)
+/meerk40t/
 
 # OS / editor
 Thumbs.db

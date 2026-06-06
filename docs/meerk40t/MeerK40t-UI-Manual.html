@@ -1,0 +1,2665 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>18-meerk40t-ui-manual</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">MeerK40t UI Manual (Meerkat)</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#meerk40t-user-interface-manual-meerkat-workspace-edition"
+id="toc-meerk40t-user-interface-manual-meerkat-workspace-edition">MeerK40t
+— User Interface Manual (Meerkat workspace edition)</a>
+<ul>
+<li><a href="#about-this-manual" id="toc-about-this-manual">About this
+manual</a>
+<ul>
+<li><a href="#screenshot-files" id="toc-screenshot-files">Screenshot
+files</a></li>
+<li><a href="#related-docs-in-this-project"
+id="toc-related-docs-in-this-project">Related docs in this
+project</a></li>
+</ul></li>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of
+contents</a></li>
+<li><a href="#illustrated-walkthrough-your-screenshots"
+id="toc-illustrated-walkthrough-your-screenshots">0. Illustrated
+walkthrough (your screenshots)</a>
+<ul>
+<li><a href="#main-window-everything-at-a-glance"
+id="toc-main-window-everything-at-a-glance">0.1 Main window — everything
+at a glance</a></li>
+<li><a href="#ribbon-project-tab" id="toc-ribbon-project-tab">0.2 Ribbon
+— Project tab</a></li>
+<li><a href="#menus-you-captured" id="toc-menus-you-captured">0.3 Menus
+you captured</a></li>
+<li><a href="#import-artwork-dxf" id="toc-import-artwork-dxf">0.4 Import
+artwork (DXF)</a></li>
+<li><a href="#operations-tree-what-will-burn"
+id="toc-operations-tree-what-will-burn">0.5 Operations tree — what will
+burn</a></li>
+<li><a href="#scene-select-measure-context-menu"
+id="toc-scene-select-measure-context-menu">0.6 Scene — select, measure,
+context menu</a></li>
+<li><a href="#grbl-device-configuration-your-dlc32-profile"
+id="toc-grbl-device-configuration-your-dlc32-profile">0.7 GRBL device
+configuration (your DLC32 profile)</a></li>
+<li><a href="#navigation-window-jog-pulse-move"
+id="toc-navigation-window-jog-pulse-move">0.8 Navigation window — jog,
+pulse, move</a></li>
+<li><a href="#material-tuning-tools" id="toc-material-tuning-tools">0.9
+Material tuning tools</a></li>
+<li><a href="#job-spooler" id="toc-job-spooler">0.10 Job
+Spooler</a></li>
+<li><a href="#simulation-before-start"
+id="toc-simulation-before-start">0.11 Simulation before Start</a></li>
+</ul></li>
+<li><a href="#big-picture-how-meerk40t-is-organized"
+id="toc-big-picture-how-meerk40t-is-organized">1. Big picture: how
+MeerK40t is organized</a></li>
+<li><a href="#starting-the-application"
+id="toc-starting-the-application">2. Starting the application</a>
+<ul>
+<li><a href="#normal-gui" id="toc-normal-gui">Normal GUI</a></li>
+<li><a href="#simple-ui--w---simpleui"
+id="toc-simple-ui--w---simpleui">Simple UI (<code>-w</code> /
+<code>--simpleui</code>)</a></li>
+<li><a href="#persistence" id="toc-persistence">Persistence</a></li>
+</ul></li>
+<li><a href="#main-window-layout" id="toc-main-window-layout">3. Main
+window layout</a>
+<ul>
+<li><a href="#typical-panes-defaults-vary-by-profile"
+id="toc-typical-panes-defaults-vary-by-profile">Typical panes (defaults
+vary by profile)</a></li>
+<li><a href="#title-bar" id="toc-title-bar">Title bar</a></li>
+</ul></li>
+<li><a href="#menus" id="toc-menus">4. Menus</a>
+<ul>
+<li><a href="#file" id="toc-file">4.1 File</a></li>
+<li><a href="#edit" id="toc-edit">4.2 Edit</a></li>
+<li><a href="#view" id="toc-view">4.3 View</a></li>
+<li><a href="#pane-menu" id="toc-pane-menu">4.4 Pane menu</a></li>
+<li><a href="#tool-window-menu-dynamic"
+id="toc-tool-window-menu-dynamic">4.5 Tool / Window menu
+(dynamic)</a></li>
+<li><a href="#network" id="toc-network">4.6 Network</a></li>
+<li><a href="#help" id="toc-help">4.7 Help</a></li>
+</ul></li>
+<li><a href="#dockable-panes" id="toc-dockable-panes">5. Dockable
+panes</a></li>
+<li><a href="#scene-work-area" id="toc-scene-work-area">6. Scene (work
+area)</a>
+<ul>
+<li><a href="#navigation-in-the-scene"
+id="toc-navigation-in-the-scene">Navigation in the scene</a></li>
+<li><a href="#emphasis-vs-selection"
+id="toc-emphasis-vs-selection">Emphasis vs selection</a></li>
+<li><a href="#bed-size-and-origin" id="toc-bed-size-and-origin">Bed size
+and origin</a></li>
+<li><a href="#colors" id="toc-colors">Colors</a></li>
+</ul></li>
+<li><a href="#drawing-and-editing-tools"
+id="toc-drawing-and-editing-tools">7. Drawing and editing tools</a>
+<ul>
+<li><a href="#node-edit-tool-important"
+id="toc-node-edit-tool-important">Node Edit tool (important)</a></li>
+</ul></li>
+<li><a href="#elements-tree" id="toc-elements-tree">8. Elements tree</a>
+<ul>
+<li><a href="#structure" id="toc-structure">Structure</a></li>
+<li><a href="#right-click-context-actions-common"
+id="toc-right-click-context-actions-common">Right-click (context)
+actions (common)</a></li>
+<li><a href="#merge-vs-break-subpaths-recap"
+id="toc-merge-vs-break-subpaths-recap">Merge vs Break Subpaths
+(recap)</a></li>
+</ul></li>
+<li><a href="#operations-tree-and-classification"
+id="toc-operations-tree-and-classification">9. Operations tree and
+classification</a>
+<ul>
+<li><a href="#concepts" id="toc-concepts">Concepts</a></li>
+<li><a href="#typical-co2-workflow"
+id="toc-typical-co2-workflow">Typical CO2 workflow</a></li>
+<li><a href="#planner-options-in-deviceplan-config"
+id="toc-planner-options-in-deviceplan-config">Planner options (in
+device/plan config)</a></li>
+</ul></li>
+<li><a href="#properties" id="toc-properties">10. Properties</a></li>
+<li><a href="#laser-panel-and-job-control"
+id="toc-laser-panel-and-job-control">11. Laser panel and job control</a>
+<ul>
+<li><a href="#main-controls-typical" id="toc-main-controls-typical">Main
+controls (typical)</a></li>
+<li><a href="#safe-sequence-grbl" id="toc-safe-sequence-grbl">Safe
+sequence (GRBL)</a></li>
+<li><a href="#unassigned-warning" id="toc-unassigned-warning">Unassigned
+warning</a></li>
+<li><a href="#toolbar-job-buttons" id="toc-toolbar-job-buttons">Toolbar
+job buttons</a></li>
+</ul></li>
+<li><a href="#navigation-and-jogging"
+id="toc-navigation-and-jogging">12. Navigation and jogging</a></li>
+<li><a href="#planner-spooler-simulation"
+id="toc-planner-spooler-simulation">13. Planner, spooler, simulation</a>
+<ul>
+<li><a href="#cut-plan-pipeline-conceptual"
+id="toc-cut-plan-pipeline-conceptual">Cut plan pipeline
+(conceptual)</a></li>
+<li><a href="#job-spooler-window" id="toc-job-spooler-window">Job
+Spooler window</a></li>
+<li><a href="#simulation-window" id="toc-simulation-window">Simulation
+window</a></li>
+<li><a href="#execute-job-thread-info"
+id="toc-execute-job-thread-info">Execute Job / Thread Info</a></li>
+</ul></li>
+<li><a href="#material-test-and-material-manager"
+id="toc-material-test-and-material-manager">14. Material Test and
+Material Manager</a></li>
+<li><a href="#device-manager-and-configuration"
+id="toc-device-manager-and-configuration">15. Device Manager and
+Configuration</a>
+<ul>
+<li><a href="#device-manager" id="toc-device-manager">Device
+Manager</a></li>
+<li><a href="#device-configuration" id="toc-device-configuration">Device
+Configuration</a></li>
+</ul></li>
+<li><a href="#console" id="toc-console">16. Console</a>
+<ul>
+<li><a href="#uses" id="toc-uses">Uses</a></li>
+</ul></li>
+<li><a href="#auxiliary-windows-reference"
+id="toc-auxiliary-windows-reference">17. Auxiliary windows
+(reference)</a></li>
+<li><a href="#view-options-and-display-modes"
+id="toc-view-options-and-display-modes">18. View options and display
+modes</a></li>
+<li><a href="#network-menu" id="toc-network-menu">19. Network
+menu</a></li>
+<li><a href="#status-bar" id="toc-status-bar">20. Status bar</a></li>
+<li><a href="#end-to-end-workflow-import-to-burn"
+id="toc-end-to-end-workflow-import-to-burn">21. End-to-end workflow:
+import to burn</a></li>
+<li><a href="#grbl-mks-dlc32-ui-notes"
+id="toc-grbl-mks-dlc32-ui-notes">22. GRBL / MKS DLC32 UI notes</a></li>
+<li><a href="#troubleshooting-the-ui"
+id="toc-troubleshooting-the-ui">23. Troubleshooting the UI</a></li>
+<li><a href="#screenshot-file-index" id="toc-screenshot-file-index">24.
+Screenshot file index</a>
+<ul>
+<li><a href="#named-images-used-in-0"
+id="toc-named-images-used-in-0">Named images (used in §0)</a></li>
+<li><a href="#archives-all-originals"
+id="toc-archives-all-originals">Archives (all originals)</a></li>
+<li><a href="#still-useful-to-capture-later"
+id="toc-still-useful-to-capture-later">Still useful to capture
+later</a></li>
+<li><a href="#pdf-build" id="toc-pdf-build">PDF build</a></li>
+</ul></li>
+<li><a href="#document-history" id="toc-document-history">Document
+history</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1
+id="meerk40t-user-interface-manual-meerkat-workspace-edition">MeerK40t —
+User Interface Manual (Meerkat workspace edition)</h1>
+<p><strong>Version:</strong> 1.1 (2026-06-03)<br />
+<strong>Based on:</strong> MeerK40t <strong>v0.9.9000</strong> on your
+PC, device <strong>GRBL-DLC32-400</strong><br />
+<strong>Screenshots:</strong> <code>images/meerk40t-ui-manual/</code>
+(copied from <code>Pictures\Screenshots\Meerk40T</code>)<br />
+<strong>Audience:</strong> Andre van der Westhuizen — GRBL / MKS DLC32
+CO2 workflow</p>
+<hr />
+<h2 id="about-this-manual">About this manual</h2>
+<p>This document explains <strong>what you see and click</strong> in
+MeerK40t. It combines <strong>source-code accuracy</strong> with
+<strong>your real screenshots</strong> (June 2026 capture session).</p>
+<h3 id="screenshot-files">Screenshot files</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Location</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>images/meerk40t-ui-manual/*.png</code></td>
+<td><strong>28 named</strong> images used in this manual</td>
+</tr>
+<tr>
+<td><code>images/meerk40t-ui-manual/full-screens/</code></td>
+<td>All 19 originals from <strong>Full screens</strong></td>
+</tr>
+<tr>
+<td><code>images/meerk40t-ui-manual/menu/</code></td>
+<td>All 52 originals from <strong>Menu</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>PDF:</strong> Install <a
+href="https://pandoc.org/installing.html">Pandoc</a>, then run
+<code>docs/meerk40t/scripts/build-ui-manual-pdf.ps1</code> →
+<code>docs/meerk40t/MeerK40t-UI-Manual.pdf</code>.</p>
+<p>Image paths in this file use
+<code>../../images/meerk40t-ui-manual/</code> (relative to
+<code>docs/meerk40t/</code>).</p>
+<h3 id="related-docs-in-this-project">Related docs in this project</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Doc</th>
+<th>Topic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="05-gui-architecture.md">05-gui-architecture.md</a></td>
+<td>Code-level GUI map</td>
+</tr>
+<tr>
+<td><a
+href="07-planner-and-spooler.md">07-planner-and-spooler.md</a></td>
+<td>Cut plans, spooler</td>
+</tr>
+<tr>
+<td><a
+href="11-core-elements-and-io.md">11-core-elements-and-io.md</a></td>
+<td>Elements tree, undo</td>
+</tr>
+<tr>
+<td><a href="14-console-quickref.md">14-console-quickref.md</a></td>
+<td>Console commands</td>
+</tr>
+<tr>
+<td><a
+href="17-meerkat-dlc32-workflow.md">17-meerkat-dlc32-workflow.md</a></td>
+<td>Your DLC32 burn workflow</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="table-of-contents">Table of contents</h2>
+<ol start="0" type="1">
+<li><a href="#0-illustrated-walkthrough-your-screenshots">Illustrated
+walkthrough (your screenshots)</a></li>
+<li><a href="#1-big-picture-how-meerk40t-is-organized">Big
+picture</a></li>
+<li><a href="#2-starting-the-application">Starting the
+application</a></li>
+<li><a href="#3-main-window-layout">Main window layout</a></li>
+<li><a href="#4-menus">Menus</a></li>
+<li><a href="#5-dockable-panes">Dockable panes</a></li>
+<li><a href="#6-scene-work-area">Scene (work area)</a></li>
+<li><a href="#7-drawing-and-editing-tools">Drawing and editing
+tools</a></li>
+<li><a href="#8-elements-tree">Elements tree</a></li>
+<li><a href="#9-operations-tree-and-classification">Operations tree and
+classification</a></li>
+<li><a href="#10-properties">Properties</a></li>
+<li><a href="#11-laser-panel-and-job-control">Laser panel and job
+control</a></li>
+<li><a href="#12-navigation-and-jogging">Navigation and jogging</a></li>
+<li><a href="#13-planner-spooler-simulation">Planner, spooler,
+simulation</a></li>
+<li><a href="#14-material-test-and-material-manager">Material Test and
+Material Manager</a></li>
+<li><a href="#15-device-manager-and-configuration">Device Manager and
+Configuration</a></li>
+<li><a href="#16-console">Console</a></li>
+<li><a href="#17-auxiliary-windows-reference">Auxiliary windows</a></li>
+<li><a href="#18-view-options-and-display-modes">View options and
+display modes</a></li>
+<li><a href="#19-network-menu">Network menu</a></li>
+<li><a href="#20-status-bar">Status bar</a></li>
+<li><a href="#21-end-to-end-workflow-import-to-burn">End-to-end
+workflow</a></li>
+<li><a href="#22-grbl--mks-dlc32-ui-notes">GRBL / DLC32 UI
+notes</a></li>
+<li><a href="#23-troubleshooting-the-ui">Troubleshooting the UI</a></li>
+<li><a href="#24-screenshot-file-index">Screenshot file index</a></li>
+</ol>
+<hr />
+<h2 id="illustrated-walkthrough-your-screenshots">0. Illustrated
+walkthrough (your screenshots)</h2>
+<p>Your session used project <strong>example edit</strong> with
+<strong>Sketch31.dxf</strong> (MKS DLC32 screen cover) loaded. Below
+maps <strong>your PNGs</strong> to what each screen does.</p>
+<h3 id="main-window-everything-at-a-glance">0.1 Main window — everything
+at a glance</h3>
+<figure>
+<img src="../../images/meerk40t-ui-manual/01-main-window.png"
+alt="MeerK40t main window — v0.9.9000, GRBL-DLC32-400" />
+<figcaption aria-hidden="true">MeerK40t main window — v0.9.9000,
+GRBL-DLC32-400</figcaption>
+</figure>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 44%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr>
+<th>Area</th>
+<th>What you see</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Title bar</strong></td>
+<td><code>MeerK40t v0.9.9000</code> · <code>GRBL-DLC32-400</code> ·
+<code>example edit</code></td>
+<td>Active device profile and project name</td>
+</tr>
+<tr>
+<td><strong>Menu bar</strong></td>
+<td>File, Edit, View, Panes, Tools, Network, Help, Languages</td>
+<td>All top-level commands</td>
+</tr>
+<tr>
+<td><strong>Ribbon → Project</strong></td>
+<td>Open, Save, Undo, Navigation, Console, Spooler, Home,
+<strong>Arm</strong>, <strong>Start</strong></td>
+<td>Daily shortcuts (see §0.2)</td>
+</tr>
+<tr>
+<td><strong>Ribbon → Modify</strong></td>
+<td>Group, <strong>Ungroup</strong>, <strong>Path Combine</strong>,
+<strong>Path Break Apart</strong>, booleans, flip, rotate</td>
+<td><strong>Unmerge</strong> = <strong>Path Break Apart</strong> (after
+Combine)</td>
+</tr>
+<tr>
+<td><strong>Left toolbars</strong></td>
+<td>Draw shapes + align/distribute</td>
+<td>Create and lay out art</td>
+</tr>
+<tr>
+<td><strong>Scene (center)</strong></td>
+<td>Grid, mm rulers, red/green origin</td>
+<td>Bed preview; click to select</td>
+</tr>
+<tr>
+<td><strong>Tree (right)</strong></td>
+<td>Operations · Elements · Regmarks</td>
+<td>Job logic + file list</td>
+</tr>
+<tr>
+<td><strong>Laser-Control</strong></td>
+<td>Jog tab, arrows, Home, keypad</td>
+<td>Move head without burning</td>
+</tr>
+<tr>
+<td><strong>Color bar (bottom)</strong></td>
+<td>C1–C3, E1–E9, R1–R2</td>
+<td>Quick color → operation mapping</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Typical burn path:</strong> classify shapes →
+<strong>Queue</strong> (Laser/Plan tab or Spooler) →
+<strong>Simulate</strong> → <strong>Connect</strong> →
+<strong>Home</strong> → <strong>Arm</strong> →
+<strong>Start</strong>.</p>
+<hr />
+<h3 id="ribbon-project-tab">0.2 Ribbon — Project tab</h3>
+<figure>
+<img src="../../images/meerk40t-ui-manual/03-ribbon-project-tab.png"
+alt="Ribbon Project tab" />
+<figcaption aria-hidden="true">Ribbon Project tab</figcaption>
+</figure>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Button</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Open / Save / Notes</strong></td>
+<td>Project file (SVG) and job notes</td>
+</tr>
+<tr>
+<td><strong>Undo / Redo</strong></td>
+<td>After merge, move, delete — <strong>Ctrl+Z</strong> undoes
+<strong>Merge elements</strong></td>
+</tr>
+<tr>
+<td><strong>Navigation</strong></td>
+<td>Opens full Navigation window (§0.8)</td>
+</tr>
+<tr>
+<td><strong>Console</strong></td>
+<td>Type <code>$101=172</code>, <code>$HY</code>, <code>$$</code>,
+<code>plan… spool</code></td>
+</tr>
+<tr>
+<td><strong>Spooler</strong></td>
+<td>See queued jobs (§0.10)</td>
+</tr>
+<tr>
+<td><strong>Controller</strong></td>
+<td>Live GRBL status</td>
+</tr>
+<tr>
+<td><strong>Pause / Stop</strong></td>
+<td>During a job</td>
+</tr>
+<tr>
+<td><strong>Clear Alarm</strong></td>
+<td>After GRBL <code>ALARM</code> — then fix cause, often
+<code>$X</code> in console</td>
+</tr>
+<tr>
+<td><strong>Home</strong></td>
+<td>Homing cycle (your profile: sequential <strong><span
+class="math inline"><em>H</em><em>Y</em> * *<em>t</em><em>h</em><em>e</em><em>n</em> * *</span>HX</strong>)</td>
+</tr>
+<tr>
+<td><strong>Simulate</strong></td>
+<td>Path preview before burning (§0.11)</td>
+</tr>
+<tr>
+<td><strong>Arm</strong></td>
+<td>Software enable before fire</td>
+</tr>
+<tr>
+<td><strong>Start</strong></td>
+<td>Run spooled job (grey until ready)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Modify tab</strong> (on main window shot): <strong>Path Break
+Apart</strong> splits combined paths; <strong>Ungroup</strong> splits
+groups only.</p>
+<hr />
+<h3 id="menus-you-captured">0.3 Menus you captured</h3>
+<p><strong>File</strong></p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/02-file-menu.png"
+alt="File menu" />
+<figcaption aria-hidden="true">File menu</figcaption>
+</figure>
+<ul>
+<li><strong>Import File</strong> — how <strong>Sketch31.dxf</strong>
+entered the project (keep <strong>Open Project</strong> for full
+<code>.svg</code> saves).</li>
+</ul>
+<p><strong>Edit</strong></p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/19-edit-menu.png"
+alt="Edit menu" />
+<figcaption aria-hidden="true">Edit menu</figcaption>
+</figure>
+<ul>
+<li><strong>Device-Manager</strong> /
+<strong>Device-Configuration</strong> — profiles and
+<strong>GRBL-DLC32-400</strong> settings.</li>
+<li><strong>Select all non-assigned</strong> — finds shapes that will
+<strong>not</strong> burn.</li>
+</ul>
+<p><strong>View → GUI Appearance / Render-Options</strong></p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/18-view-menu.png"
+alt="View menu" />
+<figcaption aria-hidden="true">View menu</figcaption>
+</figure>
+<figure>
+<img src="../../images/meerk40t-ui-manual/18b-gui-appearance.png"
+alt="GUI Appearance" />
+<figcaption aria-hidden="true">GUI Appearance</figcaption>
+</figure>
+<figure>
+<img src="../../images/meerk40t-ui-manual/18c-render-options.png"
+alt="Render-Options" />
+<figcaption aria-hidden="true">Render-Options</figcaption>
+</figure>
+<ul>
+<li><strong>Ctrl+U</strong> — show/hide all panels.</li>
+<li><strong>Hide laserpath / grid / reticle</strong> — troubleshooting
+display only.</li>
+<li><strong>Render-Options</strong> can affect burn preview — change
+carefully.</li>
+</ul>
+<p><strong>Panes</strong></p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/panes-menu-overview.png"
+alt="Panes menu overview" />
+<figcaption aria-hidden="true">Panes menu overview</figcaption>
+</figure>
+<figure>
+<img src="../../images/meerk40t-ui-manual/panes-laser-submenu.png"
+alt="Panes → Laser submenu" />
+<figcaption aria-hidden="true">Panes → Laser submenu</figcaption>
+</figure>
+<figure>
+<img src="../../images/meerk40t-ui-manual/panes-navigation-submenu.png"
+alt="Panes → Navigation submenu" />
+<figcaption aria-hidden="true">Panes → Navigation submenu</figcaption>
+</figure>
+<ul>
+<li>Checked: <strong>Ribbon</strong>, <strong>Tools</strong>,
+<strong>Modify</strong>, <strong>Tree</strong>,
+<strong>Laser-Control</strong>.</li>
+<li><strong>Reset Panes</strong> if a window disappears off-screen.</li>
+</ul>
+<p><strong>Tools</strong></p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/20-tools-menu.png"
+alt="Tools menu" />
+<figcaption aria-hidden="true">Tools menu</figcaption>
+</figure>
+<figure>
+<img src="../../images/meerk40t-ui-manual/tools-burning-submenu.png"
+alt="Tools → Burning" />
+<figcaption aria-hidden="true">Tools → Burning</figcaption>
+</figure>
+<figure>
+<img src="../../images/meerk40t-ui-manual/tools-device-control.png"
+alt="Tools → Device-Control" />
+<figcaption aria-hidden="true">Tools → Device-Control</figcaption>
+</figure>
+<table>
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr>
+<th>Submenu</th>
+<th>Opens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Burning</strong></td>
+<td>Spooler, Simulation, Execute Job</td>
+</tr>
+<tr>
+<td><strong>Device-Control</strong></td>
+<td><strong>GRBL Controller</strong>, <strong>Buffer</strong> (lines
+queued to board)</td>
+</tr>
+<tr>
+<td><strong>Editing</strong></td>
+<td>Parameter-Test, Kerf-Test, Alignment, templates, …</td>
+</tr>
+<tr>
+<td><strong>Camera</strong></td>
+<td>Webcam overlay (optional)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="import-artwork-dxf">0.4 Import artwork (DXF)</h3>
+<figure>
+<img src="../../images/meerk40t-ui-manual/file-import-dxf.png"
+alt="Windows Open — import DXF" />
+<figcaption aria-hidden="true">Windows Open — import DXF</figcaption>
+</figure>
+<p>You browsed <code>makerbase Mks dlc32</code> and selected
+<strong>Sketch31.dxf</strong>. After import, the file appears under
+<strong>Elements → File Sketch31.dxf</strong> in the Tree.</p>
+<hr />
+<h3 id="operations-tree-what-will-burn">0.5 Operations tree — what will
+burn</h3>
+<figure>
+<img src="../../images/meerk40t-ui-manual/05-operations-tree.png"
+alt="Operations tree" />
+<figcaption aria-hidden="true">Operations tree</figcaption>
+</figure>
+<ul>
+<li><strong>Operations</strong> run top to bottom (before global
+optimize).</li>
+<li>Your list includes many <strong>Cut</strong> speeds (1–18 mm/s) and
+<strong>Engrave</strong> / <strong>Raster</strong> lines.</li>
+<li>Label format: <code>Cut 3.0mm/s @ 50% #ff0000-S</code> = speed,
+power %, colour, stroke (<strong>S</strong>) vs fill
+(<strong>F</strong>).</li>
+<li><strong>Elements</strong> holds the DXF; expand to select individual
+paths.</li>
+</ul>
+<p><strong>Assign Operation</strong> (right-click shape):</p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/assign-operation-submenu.png"
+alt="Assign Operation submenu" />
+<figcaption aria-hidden="true">Assign Operation submenu</figcaption>
+</figure>
+<ul>
+<li>Pick the Cut/Engrave line that matches your material test.</li>
+<li><strong>Exclusive assignment</strong> ✓ — one operation per
+shape.</li>
+<li><strong>Inherit stroke/fill and classify similar</strong> —
+auto-assign by colour.</li>
+</ul>
+<p><strong>Operations</strong> right-click — insert homing/wait:</p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/operations-insert-special.png"
+alt="Insert special operations" />
+<figcaption aria-hidden="true">Insert special operations</figcaption>
+</figure>
+<ul>
+<li><strong>Add Physical Home</strong> — use between passes if needed
+(you also have <strong>Physical Home</strong> at job end in
+config).</li>
+</ul>
+<hr />
+<h3 id="scene-select-measure-context-menu">0.6 Scene — select, measure,
+context menu</h3>
+<figure>
+<img src="../../images/meerk40t-ui-manual/04-scene-context-menu.png"
+alt="Scene context menu — 7 elements selected" />
+<figcaption aria-hidden="true">Scene context menu — 7 elements
+selected</figcaption>
+</figure>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Element properties</strong></td>
+<td>Stroke, fill, size</td>
+</tr>
+<tr>
+<td><strong>Assign Operation</strong></td>
+<td>Link to Cut/Engrave</td>
+</tr>
+<tr>
+<td><strong>Group / Merge elements</strong></td>
+<td>Combine selection</td>
+</tr>
+<tr>
+<td><strong>Convert to path</strong></td>
+<td>Editable nodes</td>
+</tr>
+<tr>
+<td><strong>Reify / Reset user changes</strong></td>
+<td>Apply or undo scale-rotate</td>
+</tr>
+</tbody>
+</table>
+<p>Purple handles = resize/rotate. Dimension labels (e.g. <strong>127.0
+mm</strong>) show selection size on bed.</p>
+<hr />
+<h3 id="grbl-device-configuration-your-dlc32-profile">0.7 GRBL device
+configuration (your DLC32 profile)</h3>
+<p><strong>Device tab</strong> — bed size and axis flip:</p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/11-grbl-config-device.png"
+alt="GRBL Configuration — Device" />
+<figcaption aria-hidden="true">GRBL Configuration — Device</figcaption>
+</figure>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Your value</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Label</td>
+<td>GRBL-DLC32-400</td>
+<td>Matches title bar</td>
+</tr>
+<tr>
+<td>Width × Height</td>
+<td>405 × 300 mm</td>
+<td>Match <code>$130</code> / <code>$131</code> on board</td>
+</tr>
+<tr>
+<td>Flip Y</td>
+<td>✓</td>
+<td>Matches machine (into bed = Y−)</td>
+</tr>
+<tr>
+<td>Force home</td>
+<td>top-left</td>
+<td>After homing, origin top-left</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Advanced tab</strong> — homing and buffer (critical):</p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/11b-grbl-config-advanced.png"
+alt="GRBL Configuration — Advanced" />
+<figcaption aria-hidden="true">GRBL Configuration —
+Advanced</figcaption>
+</figure>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 44%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Your value</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Device has endstops</strong></td>
+<td>✓</td>
+<td>Required for your limit switches</td>
+</tr>
+<tr>
+<td><strong>Sequential homing ($HY then <span
+class="math inline"><em>H</em><em>X</em>) * *|✓|<em>A</em><em>v</em><em>o</em><em>i</em><em>d</em><em>s</em><em>i</em><em>n</em><em>g</em><em>l</em><em>e</em> * *</span>H</strong>
+on your machine</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Controller buffer</td>
+<td>200 lines</td>
+<td>WiFi/USB stability</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Default Actions</strong> — after every job:</p>
+<figure>
+<img
+src="../../images/meerk40t-ui-manual/11d-grbl-config-default-actions.png"
+alt="GRBL Configuration — Default Actions" />
+<figcaption aria-hidden="true">GRBL Configuration — Default
+Actions</figcaption>
+</figure>
+<ul>
+<li><strong>At job end:</strong> <code>Physical Home</code> — head
+returns to switches.</li>
+</ul>
+<p><strong>Other tabs captured:</strong> Effects, Display Options — see
+<code>11c-grbl-config-effects.png</code>,
+<code>11e-grbl-config-display-options.png</code> in image folder.</p>
+<p>Steps/mm calibration (<strong>$100</strong>, <strong>$101</strong>)
+is done in the <strong>Console</strong>, not on these tabs (Device
+<strong>Scale</strong> stays <strong>1.0</strong>).</p>
+<hr />
+<h3 id="navigation-window-jog-pulse-move">0.8 Navigation window — jog,
+pulse, move</h3>
+<figure>
+<img src="../../images/meerk40t-ui-manual/07-navigation.png"
+alt="Navigation window" />
+<figcaption aria-hidden="true">Navigation window</figcaption>
+</figure>
+<table>
+<colgroup>
+<col style="width: 64%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr>
+<th>Section</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Jog distance</strong></td>
+<td>e.g. <strong>50 mm</strong> for calibration moves</td>
+</tr>
+<tr>
+<td><strong>Arrow pad + Home</strong></td>
+<td>Manual jog; centre = home</td>
+</tr>
+<tr>
+<td><strong>Short Pulse</strong></td>
+<td>Brief beam for alignment (chiller + <strong>WP</strong> must be
+OK)</td>
+</tr>
+<tr>
+<td><strong>Move laser to</strong></td>
+<td>Type X/Y (your shot: ~253.1 / 140.8 mm)</td>
+</tr>
+<tr>
+<td><strong>Scale / translate</strong></td>
+<td>Numeric transform on selection</td>
+</tr>
+</tbody>
+</table>
+<p>Same jog controls exist in docked <strong>Laser-Control →
+Jog</strong> on the main window.</p>
+<hr />
+<h3 id="material-tuning-tools">0.9 Material tuning tools</h3>
+<p><strong>Parameter-Test</strong> — speed vs power grid:</p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/16-parameter-test.png"
+alt="Parameter-Test" />
+<figcaption aria-hidden="true">Parameter-Test</figcaption>
+</figure>
+<ol type="1">
+<li>Set operation <strong>Cut</strong>, X = speed, Y = power.<br />
+</li>
+<li><strong>Create Pattern</strong> on bed.<br />
+</li>
+<li>Burn → pick best square → apply to real Cut operation.<br />
+</li>
+<li><strong>Queue to Spooler</strong> sends grid to machine.</li>
+</ol>
+<p><strong>Kerf-Test</strong> — fit test pieces for beam width:</p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/kerf-test.png"
+alt="Kerf-Test" />
+<figcaption aria-hidden="true">Kerf-Test</figcaption>
+</figure>
+<hr />
+<h3 id="job-spooler">0.10 Job Spooler</h3>
+<figure>
+<img src="../../images/meerk40t-ui-manual/13-job-spooler.png"
+alt="Job Spooler" />
+<figcaption aria-hidden="true">Job Spooler</figcaption>
+</figure>
+<ul>
+<li><strong>Top:</strong> active queue — <strong>Pause</strong>,
+<strong>Abort</strong>.<br />
+</li>
+<li><strong>Bottom:</strong> completed jobs history.<br />
+</li>
+<li>Empty tables = nothing queued yet (use <strong>Queue</strong> on
+Laser pane first).</li>
+</ul>
+<hr />
+<h3 id="simulation-before-start">0.11 Simulation before Start</h3>
+<figure>
+<img src="../../images/meerk40t-ui-manual/14-simulation.png"
+alt="Simulation — Sketch31 / MKS cover" />
+<figcaption aria-hidden="true">Simulation — Sketch31 / MKS
+cover</figcaption>
+</figure>
+<ul>
+<li><strong>Red</strong> = cutting; <strong>dashed black</strong> =
+travel (laser off).<br />
+</li>
+<li>Shows <strong>laser time</strong>, <strong>travel time</strong>,
+<strong>total distance</strong>.<br />
+</li>
+<li>Your job example: ~1 h 51 min total — use to decide if order is
+acceptable.<br />
+</li>
+<li><strong>Send to Laser</strong> when satisfied (still need
+<strong>Arm</strong> + <strong>Start</strong> on main UI).</li>
+</ul>
+<hr />
+<h2 id="big-picture-how-meerk40t-is-organized">1. Big picture: how
+MeerK40t is organized</h2>
+<p>MeerK40t is built around a <strong>kernel</strong> (command
+processor) with a <strong>graphical shell</strong> on top.</p>
+<pre class="text"><code>  ┌─────────────────────────────────────────────────────────────┐
+  │  Menus · Ribbon · Status bar · Job buttons (Go/Stop/Home)   │
+  ├──────────────┬──────────────────────────────┬───────────────┤
+  │  Tree panes  │         SCENE                │ Laser / Nav   │
+  │  Elements    │   (draw, select, preview)    │  (device)     │
+  │  Operations  │                              │               │
+  ├──────────────┴──────────────────────────────┴───────────────┤
+  │  Console (commands, GRBL $ settings, errors)                 │
+  └─────────────────────────────────────────────────────────────┘</code></pre>
+<p><strong>Three ideas to remember:</strong></p>
+<ol type="1">
+<li><strong>Elements</strong> = what you drew or imported (geometry,
+text, images).</li>
+<li><strong>Operations</strong> = how the laser treats those elements
+(cut, engrave, raster, etc.).</li>
+<li><strong>Device + Spooler</strong> = connection to the controller and
+the queued job that actually runs.</li>
+</ol>
+<p>Nothing burns until: shapes are <strong>classified</strong> into
+operations → plan is <strong>built</strong> → job is
+<strong>spooled</strong> → you <strong>arm</strong> and
+<strong>start</strong> (GRBL: connect first).</p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/01-main-window.png"
+alt="Main window" />
+<figcaption aria-hidden="true">Main window</figcaption>
+</figure>
+<hr />
+<h2 id="starting-the-application">2. Starting the application</h2>
+<h3 id="normal-gui">Normal GUI</h3>
+<ul>
+<li>Run MeerK40t from your install or <code>python -m meerk40t</code>
+from the clone.</li>
+<li>A <strong>splash / busy</strong> screen may appear while plugins
+load (<code>gui/plugin.py</code>).</li>
+</ul>
+<h3 id="simple-ui--w---simpleui">Simple UI (<code>-w</code> /
+<code>--simpleui</code>)</h3>
+<p>A reduced interface without the full main window. Use the full GUI
+for learning and for CO2 workflow.</p>
+<h3 id="persistence">Persistence</h3>
+<ul>
+<li><strong>Project</strong> = saved as <strong>SVG</strong> (File →
+Save). Operations and elements live in that file.</li>
+<li><strong>Window layout</strong> can be remembered (Window menu →
+reset option clears stored pane positions).</li>
+<li><strong>Device settings</strong> live in MeerK40t config + often
+mirrored on the board (GRBL <code>$$</code>).</li>
+</ul>
+<hr />
+<h2 id="main-window-layout">3. Main window layout</h2>
+<p>The main frame is class <strong><code>MeerK40t</code></strong>
+(<code>gui/wxmmain.py</code>). Layout uses <strong>wxAUI</strong> —
+panes dock, float, tab, and hide.</p>
+<h3 id="typical-panes-defaults-vary-by-profile">Typical panes (defaults
+vary by profile)</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Pane</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Scene</strong></td>
+<td>Main bed view; draw and select here</td>
+</tr>
+<tr>
+<td><strong>Ribbon</strong></td>
+<td>Tool buttons (line, rect, edit nodes, …)</td>
+</tr>
+<tr>
+<td><strong>Tree</strong></td>
+<td>Elements + Operations tabs</td>
+</tr>
+<tr>
+<td><strong>Laser</strong></td>
+<td>Device, connect, arm, start, plan/spool</td>
+</tr>
+<tr>
+<td><strong>Console</strong></td>
+<td>Type commands; see GRBL traffic</td>
+</tr>
+<tr>
+<td><strong>Position</strong></td>
+<td>Cursor / selection coordinates</td>
+</tr>
+<tr>
+<td><strong>Go / Stop / Pause / Home</strong></td>
+<td>Quick job and homing buttons (often in toolbar)</td>
+</tr>
+</tbody>
+</table>
+<p>Open or hide panes: <strong>View</strong> menu and
+<strong>Pane</strong> submenu (dynamic list of registered
+<code>wxpane/*</code> panels).</p>
+<h3 id="title-bar">Title bar</h3>
+<p>Shows project name, device name, and status hints (connection,
+alarms). Exact format depends on version and connection state.</p>
+<hr />
+<h2 id="menus">4. Menus</h2>
+<h3 id="file">4.1 File</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 33%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr>
+<th>Item</th>
+<th>Shortcut</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>New</strong></td>
+<td>Ctrl+N</td>
+<td>Clears operations, elements, notes (fresh project)</td>
+</tr>
+<tr>
+<td><strong>Open Project</strong></td>
+<td>Ctrl+O</td>
+<td>Replaces project from SVG; <strong>Shift</strong> = pick folder</td>
+</tr>
+<tr>
+<td><strong>Import File</strong></td>
+<td>—</td>
+<td>Adds file into current project (SVG, DXF, images, …)</td>
+</tr>
+<tr>
+<td><strong>Save</strong></td>
+<td>Ctrl+S</td>
+<td>Overwrite current SVG project</td>
+</tr>
+<tr>
+<td><strong>Save As</strong></td>
+<td>Ctrl+Shift+S</td>
+<td>Save under new name</td>
+</tr>
+<tr>
+<td><strong>Recent</strong></td>
+<td>—</td>
+<td>Recent projects (not on some frozen macOS builds)</td>
+</tr>
+<tr>
+<td><strong>Exit</strong></td>
+<td>—</td>
+<td>Quit application</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="../../images/meerk40t-ui-manual/02-file-menu.png"
+alt="File menu" />
+<figcaption aria-hidden="true">File menu</figcaption>
+</figure>
+<p><strong>Tip:</strong> Your machine workflow often uses
+<strong>Import</strong> for artwork and <strong>Save</strong> before
+every long burn session.</p>
+<hr />
+<h3 id="edit">4.2 Edit</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 33%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr>
+<th>Item</th>
+<th>Shortcut</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Undo</strong></td>
+<td>Ctrl+Z</td>
+<td>Reverses last change (merge, move, delete, …)</td>
+</tr>
+<tr>
+<td><strong>Redo</strong></td>
+<td>Ctrl+Shift+Z</td>
+<td>Restores undone change</td>
+</tr>
+<tr>
+<td><strong>Editing History</strong></td>
+<td>—</td>
+<td>Submenu to jump to an earlier undo state</td>
+</tr>
+<tr>
+<td><strong>Cut / Copy / Paste</strong></td>
+<td>Ctrl+X/C/V</td>
+<td>Clipboard inside MeerK40t</td>
+</tr>
+<tr>
+<td><strong>Paste from system</strong></td>
+<td>Shift+Ctrl+V</td>
+<td>Paste from other apps (e.g. Illustrator paths)</td>
+</tr>
+<tr>
+<td><strong>Select all</strong></td>
+<td>Ctrl+A</td>
+<td>Emphasize every element</td>
+</tr>
+<tr>
+<td><strong>Select None</strong></td>
+<td>—</td>
+<td>Clear selection</td>
+</tr>
+<tr>
+<td><strong>Invert selection</strong></td>
+<td>Ctrl+I</td>
+<td>Toggle selection</td>
+</tr>
+<tr>
+<td><strong>Select all non-assigned</strong></td>
+<td>—</td>
+<td>Highlights shapes not in any operation</td>
+</tr>
+<tr>
+<td><strong>Delete</strong></td>
+<td>—</td>
+<td>Remove selected tree items</td>
+</tr>
+<tr>
+<td><strong>Properties</strong></td>
+<td>—</td>
+<td>Opens Properties window for selection</td>
+</tr>
+<tr>
+<td><strong>Device-Manager</strong></td>
+<td>—</td>
+<td>Add/switch laser devices</td>
+</tr>
+<tr>
+<td><strong>Device-Configuration</strong></td>
+<td>—</td>
+<td>Active device settings (GRBL port, speeds, …)</td>
+</tr>
+<tr>
+<td><strong>Preferences</strong></td>
+<td>—</td>
+<td>Global GUI and behavior</td>
+</tr>
+<tr>
+<td><strong>Wordlist</strong></td>
+<td>—</td>
+<td>Variable text lists</td>
+</tr>
+<tr>
+<td><strong>Hershey Font Manager</strong></td>
+<td>—</td>
+<td>Stroke fonts for engraving</td>
+</tr>
+<tr>
+<td><strong>Keymap</strong></td>
+<td>—</td>
+<td>Keyboard shortcut editor</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="../../images/meerk40t-ui-manual/19-edit-menu.png"
+alt="Edit menu" />
+<figcaption aria-hidden="true">Edit menu</figcaption>
+</figure>
+<p><strong>Merge / unmerge:</strong> There is no menu item named
+“Unmerge”. Use <strong>Undo</strong> after <strong>Merge
+elements</strong>, or right-click a path → <strong>Break
+Subpaths</strong> (see <a href="#8-elements-tree">§8</a>).</p>
+<hr />
+<h3 id="view">4.3 View</h3>
+<p>Controls <strong>what is drawn</strong> on the scene and in the burn
+preview — not the laser hardware.</p>
+<p><strong>GUI Appearance</strong> (examples):</p>
+<ul>
+<li>Theme / colors</li>
+<li>Icon sizes</li>
+<li>Tooltip and overlay behavior</li>
+</ul>
+<p><strong>Scene Appearance</strong> (examples):</p>
+<ul>
+<li><strong>Hide Shapes / Text / Images</strong> — toggles draw
+categories</li>
+<li><strong>Render-Options</strong> — advanced: affects on-screen and
+burn-phase treatment (use carefully)</li>
+<li><strong>Show origin</strong>, grid, guides, magnet targets</li>
+<li><strong>Show variable replacement</strong> — preview wordlist
+substitutions in text</li>
+</ul>
+<figure>
+<img src="../../images/meerk40t-ui-manual/18-view-menu.png"
+alt="View menu" />
+<figcaption aria-hidden="true">View menu</figcaption>
+</figure>
+<p>If the bed looks “empty” but the tree has items, check <strong>Hide
+Shapes</strong> and emphasis (selection).</p>
+<hr />
+<h3 id="pane-menu">4.4 Pane menu</h3>
+<p>Lists all registered dock panels (Console, Tree, Laser, Navigation
+sub-panes, Snap options, etc.). Check = visible.</p>
+<hr />
+<h3 id="tool-window-menu-dynamic">4.5 Tool / Window menu (dynamic)</h3>
+<p><strong>Window</strong> menu is built from registered
+<code>window/*</code> modules. Grouped entries open tools such as:</p>
+<ul>
+<li>Alignment, Simulation, Material Manager, Split Image, Kerf, Living
+Hinge, …</li>
+</ul>
+<p><strong>Reset window positions</strong> — restores default layout
+when panes are lost off-screen.</p>
+<hr />
+<h3 id="network">4.6 Network</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Webserver</strong></td>
+<td>Control MeerK40t from a browser (port in settings)</td>
+</tr>
+<tr>
+<td><strong>Telnet / consoleserver</strong></td>
+<td>Remote console</td>
+</tr>
+<tr>
+<td><strong>GRBL-server</strong></td>
+<td>Third-party apps talking GRBL through MeerK40t</td>
+</tr>
+<tr>
+<td><strong>Ruida-server</strong></td>
+<td>Same idea for Ruida</td>
+</tr>
+</tbody>
+</table>
+<p><em>Network menu — not captured in this session; use menu bar
+<strong>Network</strong> for Webserver / Telnet / GRBL-server.</em></p>
+<hr />
+<h3 id="help">4.7 Help</h3>
+<ul>
+<li>Online help (context-sensitive where implemented)</li>
+<li>Offline help bundle (if shipped with your build)</li>
+<li>About, Tips window, links to wiki/GitHub</li>
+</ul>
+<hr />
+<h2 id="dockable-panes">5. Dockable panes</h2>
+<p>Registered in <code>gui/wxmeerk40t.py</code> and related modules.</p>
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr>
+<th>Registration</th>
+<th>User-facing role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wxpane/ScenePane</code></td>
+<td>Scene container</td>
+</tr>
+<tr>
+<td><code>wxpane/Ribbon</code></td>
+<td>Tool ribbon</td>
+</tr>
+<tr>
+<td><code>wxpane/Tree</code></td>
+<td>Elements + Operations</td>
+</tr>
+<tr>
+<td><code>wxpane/LaserPanel</code></td>
+<td>Device + burn controls</td>
+</tr>
+<tr>
+<td><code>wxpane/Navigation</code></td>
+<td>Jog, pulse, transforms (sub-panes)</td>
+</tr>
+<tr>
+<td><code>wxpane/Position</code></td>
+<td>Live coordinates</td>
+</tr>
+<tr>
+<td><code>wxpane/opassign</code></td>
+<td>Quick operation assignment</td>
+</tr>
+<tr>
+<td><code>wxpane/Snap</code></td>
+<td>Snap distances and modes</td>
+</tr>
+<tr>
+<td><code>wxpane/magnet</code></td>
+<td>Magnetic alignment helpers</td>
+</tr>
+<tr>
+<td><code>wxpane/wordlist</code></td>
+<td>Wordlist quick access</td>
+</tr>
+<tr>
+<td><code>pane/console</code></td>
+<td>Console</td>
+</tr>
+<tr>
+<td><code>pane/laser</code></td>
+<td>Alternate laser strip</td>
+</tr>
+<tr>
+<td><code>pane/jog</code>, <code>pane/drag</code>,
+<code>pane/move</code>, <code>pane/pulse</code>,
+<code>pane/transform</code></td>
+<td>Navigation pieces</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Drag pane title bars</strong> to dock left/right/bottom or
+float. Right-click pane tab for hide/close.</p>
+<hr />
+<h2 id="scene-work-area">6. Scene (work area)</h2>
+<p>The scene (<code>gui/wxmscene.py</code>,
+<code>gui/scene/scene.py</code>) is your <strong>virtual
+bed</strong>.</p>
+<h3 id="navigation-in-the-scene">Navigation in the scene</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Typical input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pan</td>
+<td>Middle-mouse drag or dedicated pan mode</td>
+</tr>
+<tr>
+<td>Zoom</td>
+<td>Mouse wheel or zoom tool</td>
+</tr>
+<tr>
+<td>Select</td>
+<td>Click shape; shift-click add; drag rectangle</td>
+</tr>
+<tr>
+<td>Move selection</td>
+<td>Drag selected objects</td>
+</tr>
+<tr>
+<td>Resize / rotate</td>
+<td>Handles when selection tool active</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="../../images/meerk40t-ui-manual/04-scene-context-menu.png"
+alt="Scene — selection and context menu" />
+<figcaption aria-hidden="true">Scene — selection and context
+menu</figcaption>
+</figure>
+<h3 id="emphasis-vs-selection">Emphasis vs selection</h3>
+<ul>
+<li><strong>Emphasized</strong> items (highlighted in tree) are what
+operations and Properties act on.</li>
+<li>Many menu items require <code>has_emphasis</code> (something
+selected).</li>
+</ul>
+<h3 id="bed-size-and-origin">Bed size and origin</h3>
+<p>Comes from <strong>device settings</strong> (for GRBL: workspace
+size, origin corner). Scene grid should match
+<code>$130</code>/<code>$131</code> soft limits after calibration.</p>
+<h3 id="colors">Colors</h3>
+<p>Stroke/fill in scene reflect element attributes; operation colors may
+show in preview modes. <strong>GuiColors</strong> service drives
+themes.</p>
+<hr />
+<h2 id="drawing-and-editing-tools">7. Drawing and editing tools</h2>
+<p>Tools register under <code>tool/*</code> in
+<code>wxmscene.py</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Tool ID</th>
+<th>Name (typical)</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool/draw</code></td>
+<td>Draw</td>
+<td>Freehand paths</td>
+</tr>
+<tr>
+<td><code>tool/rect</code></td>
+<td>Rectangle</td>
+<td>Boxes</td>
+</tr>
+<tr>
+<td><code>tool/line</code></td>
+<td>Line</td>
+<td>Single segments</td>
+</tr>
+<tr>
+<td><code>tool/polyline</code></td>
+<td>Polyline</td>
+<td>Connected segments</td>
+</tr>
+<tr>
+<td><code>tool/polygon</code></td>
+<td>Polygon</td>
+<td>Closed polygon</td>
+</tr>
+<tr>
+<td><code>tool/circle</code></td>
+<td>Circle</td>
+<td>Circles</td>
+</tr>
+<tr>
+<td><code>tool/ellipse</code></td>
+<td>Ellipse</td>
+<td>Ellipses</td>
+</tr>
+<tr>
+<td><code>tool/point</code></td>
+<td>Point</td>
+<td>Mark points</td>
+</tr>
+<tr>
+<td><code>tool/text</code></td>
+<td>Text</td>
+<td>Text boxes</td>
+</tr>
+<tr>
+<td><code>tool/linetext</code></td>
+<td>Line text</td>
+<td>Text along a line</td>
+</tr>
+<tr>
+<td><code>tool/vector</code></td>
+<td>Vector</td>
+<td>Vector-specific ops</td>
+</tr>
+<tr>
+<td><code>tool/measure</code></td>
+<td>Measure</td>
+<td>Distance measurement</td>
+</tr>
+<tr>
+<td><code>tool/relocate</code></td>
+<td>Relocate</td>
+<td>Move job origin</td>
+</tr>
+<tr>
+<td><code>tool/placement</code></td>
+<td>Placement</td>
+<td>Place imported art</td>
+</tr>
+<tr>
+<td><code>tool/edit</code></td>
+<td>Node Edit</td>
+<td>Edit path points</td>
+</tr>
+<tr>
+<td><code>tool/nodemove</code></td>
+<td>Node Move</td>
+<td>Move single nodes</td>
+</tr>
+<tr>
+<td><code>tool/pointmove</code></td>
+<td>Point Move</td>
+<td>Fine point drag</td>
+</tr>
+<tr>
+<td><code>tool/parameter</code></td>
+<td>Parameter</td>
+<td>Edit path parameters</td>
+</tr>
+<tr>
+<td><code>tool/imagecut</code></td>
+<td>Image cut</td>
+<td>Cut contours from image</td>
+</tr>
+<tr>
+<td><code>tool/tabedit</code></td>
+<td>Tab edit</td>
+<td>Tabs for mechanical parts</td>
+</tr>
+<tr>
+<td><code>tool/ribbon</code></td>
+<td>Ribbon</td>
+<td>Meta-tool on ribbon bar</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="../../images/meerk40t-ui-manual/03-ribbon-project-tab.png"
+alt="Ribbon — Project tab" />
+<figcaption aria-hidden="true">Ribbon — Project tab</figcaption>
+</figure>
+<h3 id="node-edit-tool-important">Node Edit tool (important)</h3>
+<ul>
+<li>Select a <strong>path</strong> → activate <strong>Node
+Edit</strong>.</li>
+<li>Click points; drag handles for Bézier control.</li>
+<li><strong>Break</strong> (<code>b</code> key in tool): split path at
+selected point(s) — different from <strong>Break Subpaths</strong> in
+tree.</li>
+<li><strong>Insert</strong> / <strong>Delete</strong> points as needed
+for cleanup after import.</li>
+</ul>
+<p><em>Node Edit tool — activate from left toolbar; use
+<strong>Break</strong> on a point to split a path (see §0.1 Modify
+ribbon <strong>Path Break Apart</strong> for combined paths).</em></p>
+<hr />
+<h2 id="elements-tree">8. Elements tree</h2>
+<p>Left tree tab <strong>Elements</strong> lists all geometry
+groups.</p>
+<h3 id="structure">Structure</h3>
+<ul>
+<li><strong>Group</strong> — folder-like container</li>
+<li><strong>elem path</strong>, <strong>elem rect</strong>, <strong>elem
+image</strong>, <strong>elem text</strong>, … — leaf types</li>
+<li><strong>Regmark</strong> / guide layers may appear depending on
+profile</li>
+</ul>
+<h3 id="right-click-context-actions-common">Right-click (context)
+actions (common)</h3>
+<p>Exact list depends on node type and lock state. Examples from
+<code>element_treeops.py</code>:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Action</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Merge elements</strong></td>
+<td>Multiple shapes → one <strong>path</strong> (undo: Ctrl+Z)</td>
+</tr>
+<tr>
+<td><strong>Break Subpaths</strong></td>
+<td>One path → group of separate paths</td>
+</tr>
+<tr>
+<td><strong>Merge items</strong> (on group)</td>
+<td>Children → single path</td>
+</tr>
+<tr>
+<td><strong>Lock / Unlock</strong></td>
+<td>Prevent edits</td>
+</tr>
+<tr>
+<td><strong>Copy / Paste</strong></td>
+<td>Duplicate subtrees</td>
+</tr>
+<tr>
+<td><strong>Classify</strong></td>
+<td>Auto-assign to operations</td>
+</tr>
+<tr>
+<td><strong>Ungroup</strong></td>
+<td>Split group</td>
+</tr>
+<tr>
+<td><strong>Reorder</strong> (up/down)</td>
+<td>Tree order (can affect burn order before planner)</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="../../images/meerk40t-ui-manual/04-scene-context-menu.png"
+alt="Elements — scene context menu" />
+<figcaption aria-hidden="true">Elements — scene context
+menu</figcaption>
+</figure>
+<h3 id="merge-vs-break-subpaths-recap">Merge vs Break Subpaths
+(recap)</h3>
+<ul>
+<li><strong>Merge</strong> = design choice to combine geometry.</li>
+<li><strong>Break Subpaths</strong> = splits
+<strong>disconnected</strong> contours inside one path into separate
+elements.</li>
+<li>Stitched contours (shared endpoints) may stay one path until you
+<strong>Break</strong> in node edit or Undo merge.</li>
+</ul>
+<hr />
+<h2 id="operations-tree-and-classification">9. Operations tree and
+classification</h2>
+<p>Second tab <strong>Operations</strong> defines <strong>Cut</strong>,
+<strong>Engrave</strong>, <strong>Raster</strong>, <strong>Image
+op</strong>, <strong>Dots</strong>, etc.</p>
+<h3 id="concepts">Concepts</h3>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Operation</strong></td>
+<td>Laser settings + rules for a set of shapes</td>
+</tr>
+<tr>
+<td><strong>Classification</strong></td>
+<td>Linking elements → operations (stroke color, fill, automatic
+rules)</td>
+</tr>
+<tr>
+<td><strong>Re-Classify</strong></td>
+<td>Re-run rules after you change art</td>
+</tr>
+<tr>
+<td><strong>Unassigned</strong></td>
+<td>Shapes not in any operation — <strong>will not burn</strong></td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="../../images/meerk40t-ui-manual/05-operations-tree.png"
+alt="Operations tree" />
+<figcaption aria-hidden="true">Operations tree</figcaption>
+</figure>
+<h3 id="typical-co2-workflow">Typical CO2 workflow</h3>
+<ol type="1">
+<li>Create <strong>Cut</strong> operation (speed, power, passes).</li>
+<li>Import or draw art.</li>
+<li><strong>Classify</strong> (drag-drop or automatic).</li>
+<li>Open <strong>Operation Properties</strong> — confirm power/speed,
+<strong>dot length</strong>, <strong>frequency</strong> (device
+dependent).</li>
+<li>If inner holes skip: enable <strong>Fill</strong> on Cut op or
+assign inner paths to Cut (see <a
+href="17-meerkat-dlc32-workflow.md">17-meerkat-dlc32-workflow.md</a>).</li>
+</ol>
+<h3 id="planner-options-in-deviceplan-config">Planner options (in
+device/plan config)</h3>
+<ul>
+<li><strong>Merge Operations</strong> / <strong>Merge Passes</strong> —
+optimizes order at spool time; does <strong>not</strong> merge shapes in
+the scene.</li>
+</ul>
+<hr />
+<h2 id="properties">10. Properties</h2>
+<p><strong>Window → Properties</strong> or Edit → Properties.</p>
+<p>Two contexts:</p>
+<ol type="1">
+<li><strong>Element properties</strong> — position, size, stroke, fill,
+font, image DPI, etc.</li>
+<li><strong>Operation properties</strong> — power, speed, passes, kerf,
+dithering, raster direction, GRBL-specific tabs from driver
+plugins.</li>
+</ol>
+<p><em>Properties window — open via <strong>Edit → Properties</strong>
+or right-click <strong>Element properties</strong> (not in this
+screenshot set).</em></p>
+<p>Changes apply to <strong>emphasized</strong> items. Multi-selection
+may show common fields only.</p>
+<hr />
+<h2 id="laser-panel-and-job-control">11. Laser panel and job
+control</h2>
+<p>The <strong>Laser</strong> pane (<code>gui/laserpanel.py</code>) is
+the control center for the active device.</p>
+<h3 id="main-controls-typical">Main controls (typical)</h3>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Device selector</strong></td>
+<td>Which configured laser profile</td>
+</tr>
+<tr>
+<td><strong>Connect / Disconnect</strong></td>
+<td>Open serial/TCP to controller</td>
+</tr>
+<tr>
+<td><strong>Arm</strong></td>
+<td>Permit firing (safety interlock in software)</td>
+</tr>
+<tr>
+<td><strong>Start / Execute</strong></td>
+<td>Run spooled job</td>
+</tr>
+<tr>
+<td><strong>Pause / Resume</strong></td>
+<td>Pause motion</td>
+</tr>
+<tr>
+<td><strong>Stop / E-Stop</strong></td>
+<td>Halt job and reset planner state</td>
+</tr>
+<tr>
+<td><strong>Queue / Plan</strong></td>
+<td>Build cut plan and spool</td>
+</tr>
+<tr>
+<td><strong>Hold</strong></td>
+<td>Reuse last plan without full rebuild (when blob exists)</td>
+</tr>
+<tr>
+<td><strong>Update plan</strong></td>
+<td>Refresh plan after edits</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="../../images/meerk40t-ui-manual/01-main-window.png"
+alt="Laser-Control pane — bottom right of main window" />
+<figcaption aria-hidden="true">Laser-Control pane — bottom right of main
+window</figcaption>
+</figure>
+<h3 id="safe-sequence-grbl">Safe sequence (GRBL)</h3>
+<ol type="1">
+<li>Chiller / <strong><code>WP</code></strong> interlock
+satisfied.<br />
+</li>
+<li><strong>Connect</strong>.<br />
+</li>
+<li><strong>Home</strong> (<code>$HY</code> then <code>$HX</code> on
+your machine — use Navigation or configured home buttons).<br />
+</li>
+<li><strong>Queue</strong> job (checks unassigned shapes).<br />
+</li>
+<li><strong>Arm</strong> → <strong>Start</strong>.</li>
+</ol>
+<h3 id="unassigned-warning">Unassigned warning</h3>
+<p>When queueing, MeerK40t may warn that some shapes are not assigned —
+inner detail may be skipped. Read the dialog; fix via Re-Classify or
+drag to Cut.</p>
+<p><em>Unassigned-shapes warning — appears when queueing if shapes are
+not in any operation (see §0.5).</em></p>
+<h3 id="toolbar-job-buttons">Toolbar job buttons</h3>
+<ul>
+<li><strong>Go</strong> — start/spool depending on context<br />
+</li>
+<li><strong>Stop</strong> — emergency stop icon<br />
+</li>
+<li><strong>Home</strong> — homing cycle<br />
+</li>
+<li><strong>Pause</strong> — pause spooler</li>
+</ul>
+<p>Colors follow <strong>themes</strong> (arm = caution, stop =
+red).</p>
+<hr />
+<h2 id="navigation-and-jogging">12. Navigation and jogging</h2>
+<p><strong>Window → Navigation</strong> opens jog controls.</p>
+<table>
+<thead>
+<tr>
+<th>Sub-panel</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Jog</strong></td>
+<td>Direction buttons, continuous jog</td>
+</tr>
+<tr>
+<td><strong>Jog distance</strong></td>
+<td>Step size (1 mm, 10 mm, 100 mm, …)</td>
+</tr>
+<tr>
+<td><strong>Move</strong></td>
+<td>Go to absolute X/Y</td>
+</tr>
+<tr>
+<td><strong>Pulse</strong></td>
+<td>Short laser fire for alignment (with caution)</td>
+</tr>
+<tr>
+<td><strong>Transform</strong></td>
+<td>Scale/rotate selection numerically</td>
+</tr>
+<tr>
+<td><strong>Drag</strong></td>
+<td>Drag-style positioning</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="../../images/meerk40t-ui-manual/07-navigation.png"
+alt="Navigation" />
+<figcaption aria-hidden="true">Navigation</figcaption>
+</figure>
+<p><strong>GRBL note:</strong> Jog moves use controller jog mode;
+calibrate <code>$100</code>/<code>$101</code> using real measurements
+(see <a href="16-mks-dlc32-board.md">16-mks-dlc32-board.md</a>).</p>
+<p><strong>Confined coordinates:</strong> MeerK40t may limit jog to bed
+— if jog “stops early”, check soft limits and homing.</p>
+<hr />
+<h2 id="planner-spooler-simulation">13. Planner, spooler,
+simulation</h2>
+<h3 id="cut-plan-pipeline-conceptual">Cut plan pipeline
+(conceptual)</h3>
+<pre class="text"><code>  Elements + Operations
+        → copy → preprocess → validate → blob → [optimize] → spool
+        → LaserJob on device spooler</code></pre>
+<h3 id="job-spooler-window">Job Spooler window</h3>
+<p><strong>Window → Job Spooler</strong> — list of queued jobs,
+progress, cancel.</p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/13-job-spooler.png"
+alt="Job spooler" />
+<figcaption aria-hidden="true">Job spooler</figcaption>
+</figure>
+<h3 id="simulation-window">Simulation window</h3>
+<p><strong>Window → Simulation</strong> — preview path order, travels,
+timing estimate.</p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/14-simulation.png"
+alt="Simulation" />
+<figcaption aria-hidden="true">Simulation</figcaption>
+</figure>
+<h3 id="execute-job-thread-info">Execute Job / Thread Info</h3>
+<p>Long plans may open <strong>Thread Info</strong> when threaded
+planning is enabled — shows background planner progress.</p>
+<p><em>Execute Job / Thread Info — opens during long plan builds (Tools
+→ Burning).</em></p>
+<hr />
+<h2 id="material-test-and-material-manager">14. Material Test and
+Material Manager</h2>
+<table>
+<thead>
+<tr>
+<th>Window</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Material Manager</strong></td>
+<td>Library of power/speed presets per material</td>
+</tr>
+<tr>
+<td><strong>Material Test</strong></td>
+<td>Grid of test burns (power/speed matrix)</td>
+</tr>
+</tbody>
+</table>
+<p>Used heavily in <a
+href="17-meerkat-dlc32-workflow.md">17-meerkat-dlc32-workflow.md</a>.</p>
+<p><em>Material Manager — Tools → Editing (not captured).</em></p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/16-parameter-test.png"
+alt="Parameter-Test" />
+<figcaption aria-hidden="true">Parameter-Test</figcaption>
+</figure>
+<p>After a test grid: pick best cell → apply settings to operation →
+queue real job.</p>
+<hr />
+<h2 id="device-manager-and-configuration">15. Device Manager and
+Configuration</h2>
+<h3 id="device-manager">Device Manager</h3>
+<p><strong>Edit → Device-Manager</strong> — create profiles:
+<strong>GRBL</strong>, Lihuiyu, Ruida, Balor, …</p>
+<p><em>Device Manager — Edit → Device-Manager (not captured).</em></p>
+<p>For DLC32 you typically have one <strong>GRBL</strong> device:</p>
+<ul>
+<li>Connection: <strong>USB COM</strong> or <strong>TCP</strong>
+<code>192.168.x.x:8080</code> (WiFi bridge)</li>
+<li>Baud: often <strong>115200</strong> USB</li>
+<li>Options: <strong>has endstops</strong>, <strong>sequential
+homing</strong>, connect delay</li>
+</ul>
+<h3 id="device-configuration">Device Configuration</h3>
+<p><strong>Edit → Device-Configuration</strong> — speeds, bed size, flip
+flags, GRBL <code>$</code> passthrough, controller behavior.</p>
+<figure>
+<img src="../../images/meerk40t-ui-manual/11-grbl-config-device.png"
+alt="GRBL configuration — Device tab" />
+<figcaption aria-hidden="true">GRBL configuration — Device
+tab</figcaption>
+</figure>
+<p>See also §0.7 for <strong>Advanced</strong> and <strong>Default
+Actions</strong> screenshots.</p>
+<p><strong>Writing <code>$$</code>:</strong> Console shows
+<code>ok</code> per line. A <strong>PermissionError</strong> on
+“WriteFile” is MeerK40t failing to save a log on <strong>PC</strong> —
+not always a board reject. Confirm with <code>$$</code> readback.</p>
+<hr />
+<h2 id="console">16. Console</h2>
+<p>Bottom <strong>Console</strong> pane — full command language.</p>
+<h3 id="uses">Uses</h3>
+<ul>
+<li>Run planning:
+<code>plan0 clear copy preprocess validate blob spool</code></li>
+<li>Element ops: <code>element merge</code>,
+<code>element subpath</code></li>
+<li>GRBL: <code>$101=172</code>, <code>$HY</code>, <code>$HX</code>,
+<code>?</code>, <code>$X</code> unlock</li>
+<li>Window: <code>window open Simulation</code></li>
+</ul>
+<p><em>Console pane — open from Ribbon <strong>Console</strong> or Panes
+menu (not captured; use for <code>$100</code>, <code>$101</code>,
+<code>$$</code>).</em></p>
+<p>See <a href="14-console-quickref.md">14-console-quickref.md</a>. Type
+<code>help</code> and <code>help &lt;command&gt;</code> for
+discovery.</p>
+<hr />
+<h2 id="auxiliary-windows-reference">17. Auxiliary windows
+(reference)</h2>
+<p>Registered in <code>gui/wxmeerk40t.py</code> (open via
+<strong>Window</strong> menu or console):</p>
+<table>
+<thead>
+<tr>
+<th>Window</th>
+<th>Typical use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MeerK40t</strong></td>
+<td>Main frame (this manual)</td>
+</tr>
+<tr>
+<td><strong>Properties</strong></td>
+<td>Edit selection</td>
+</tr>
+<tr>
+<td><strong>Console</strong></td>
+<td>Commands</td>
+</tr>
+<tr>
+<td><strong>Preferences</strong></td>
+<td>Global settings</td>
+</tr>
+<tr>
+<td><strong>About</strong></td>
+<td>Version</td>
+</tr>
+<tr>
+<td><strong>Keymap</strong></td>
+<td>Shortcuts</td>
+</tr>
+<tr>
+<td><strong>Wordlist</strong></td>
+<td>Parametric text</td>
+</tr>
+<tr>
+<td><strong>MatManager</strong></td>
+<td>Materials library</td>
+</tr>
+<tr>
+<td><strong>Navigation</strong></td>
+<td>Jog / pulse</td>
+</tr>
+<tr>
+<td><strong>Notes</strong></td>
+<td>Project notes</td>
+</tr>
+<tr>
+<td><strong>AutoExec</strong></td>
+<td>Commands on events</td>
+</tr>
+<tr>
+<td><strong>JobSpooler</strong></td>
+<td>Queue</td>
+</tr>
+<tr>
+<td><strong>ThreadInfo</strong></td>
+<td>Planner threads</td>
+</tr>
+<tr>
+<td><strong>Simulation</strong></td>
+<td>Path preview</td>
+</tr>
+<tr>
+<td><strong>Tips</strong></td>
+<td>Daily tips</td>
+</tr>
+<tr>
+<td><strong>ExecuteJob</strong></td>
+<td>Job execution UI</td>
+</tr>
+<tr>
+<td><strong>BufferView</strong></td>
+<td>Driver buffer debug</td>
+</tr>
+<tr>
+<td><strong>Scene</strong></td>
+<td>Secondary scene view</td>
+</tr>
+<tr>
+<td><strong>DeviceManager</strong></td>
+<td>Devices</td>
+</tr>
+<tr>
+<td><strong>Alignment</strong></td>
+<td>Align objects to each other / bed</td>
+</tr>
+<tr>
+<td><strong>HersheyFontManager</strong></td>
+<td>Fonts</td>
+</tr>
+<tr>
+<td><strong>HersheyFontSelector</strong></td>
+<td>Pick font</td>
+</tr>
+<tr>
+<td><strong>SplitImage</strong></td>
+<td>Large raster tiling</td>
+</tr>
+<tr>
+<td><strong>OperationInfo</strong></td>
+<td>Operation summary</td>
+</tr>
+<tr>
+<td><strong>Lasertool</strong></td>
+<td>Laser-specific utilities</td>
+</tr>
+<tr>
+<td><strong>Templatetool</strong></td>
+<td>Templates</td>
+</tr>
+<tr>
+<td><strong>Hingetool</strong></td>
+<td>Living hinge patterns</td>
+</tr>
+<tr>
+<td><strong>Kerftest</strong></td>
+<td>Kerf compensation tests</td>
+</tr>
+<tr>
+<td><strong>SimpleUI</strong></td>
+<td>Minimal UI</td>
+</tr>
+<tr>
+<td><strong>CameraInterface</strong></td>
+<td>Camera overlay (if plugin loaded)</td>
+</tr>
+</tbody>
+</table>
+<p><em>Alignment window — Tools → Editing (not captured).</em></p>
+<hr />
+<h2 id="view-options-and-display-modes">18. View options and display
+modes</h2>
+<p><strong>View → Scene Appearance</strong> toggles bits in
+<code>draw_mode</code>:</p>
+<ul>
+<li>Hide categories (paths, text, images)</li>
+<li>Hide effects / non-burn layers</li>
+<li>Show magnets, grid, origin</li>
+<li>Variable preview for wordlists</li>
+</ul>
+<p><strong>Render-Options</strong> affect how fills and vectors are
+interpreted at <strong>render and burn</strong> — only change when you
+understand the planner impact.</p>
+<hr />
+<h2 id="network-menu">19. Network menu</h2>
+<p>Start/stop embedded servers (see <a href="#46-network">§4.6</a>).
+Useful for phone/tablet control on same LAN — secure your network;
+anyone on the port can send commands.</p>
+<hr />
+<h2 id="status-bar">20. Status bar</h2>
+<p>Widgets along the bottom (<code>gui/statusbarwidgets/</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Widget area</th>
+<th>Info</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Selection</strong></td>
+<td>Count, size of selection</td>
+</tr>
+<tr>
+<td><strong>Position</strong></td>
+<td>Mouse / tool position</td>
+</tr>
+<tr>
+<td><strong>Operation assign</strong></td>
+<td>Quick assign emphasized → op</td>
+</tr>
+<tr>
+<td><strong>Stroke/fill</strong></td>
+<td>Quick style readout</td>
+</tr>
+<tr>
+<td><strong>Job progress</strong></td>
+<td>Spooler step fraction during burn</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="../../images/meerk40t-ui-manual/01-main-window.png"
+alt="Status bar and colour palette — bottom of main window" />
+<figcaption aria-hidden="true">Status bar and colour palette — bottom of
+main window</figcaption>
+</figure>
+<hr />
+<h2 id="end-to-end-workflow-import-to-burn">21. End-to-end workflow:
+import to burn</h2>
+<ol type="1">
+<li><strong>File → Import</strong> artwork (SVG/DXF).<br />
+</li>
+<li>Check scale and position on scene.<br />
+</li>
+<li>Ensure <strong>Cut</strong> (and <strong>Engrave</strong> if needed)
+operations exist.<br />
+</li>
+<li><strong>Classify</strong> or manual drag to operations.<br />
+</li>
+<li><strong>Device-Configuration</strong> — connect type, bed
+size.<br />
+</li>
+<li><strong>Connect</strong> on Laser pane.<br />
+</li>
+<li><strong>Home</strong> machine.<br />
+</li>
+<li><strong>Pulse</strong> / low power + jog → align to material
+corner.<br />
+</li>
+<li><strong>Queue</strong> plan (fix unassigned if warned).<br />
+</li>
+<li><strong>Simulation</strong> — optional but recommended for
+order/travel.<br />
+</li>
+<li><strong>Arm</strong> → <strong>Start</strong>.<br />
+</li>
+<li>Monitor spooler; <strong>Stop</strong> if something wrong.</li>
+</ol>
+<hr />
+<h2 id="grbl-mks-dlc32-ui-notes">22. GRBL / MKS DLC32 UI notes</h2>
+<p>Specific to your setup (<a
+href="16-mks-dlc32-board.md">16-mks-dlc32-board.md</a>, <a
+href="17-meerkat-dlc32-workflow.md">17-meerkat-dlc32-workflow.md</a>):</p>
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr>
+<th>Topic</th>
+<th>UI behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Homing</strong></td>
+<td>Prefer <strong><span
+class="math inline"><em>H</em><em>Y</em> * *<em>t</em><em>h</em><em>e</em><em>n</em> * *</span>HX</strong>;
+avoid single <strong>$H</strong></td>
+</tr>
+<tr>
+<td><strong>Touch panel jog</strong></td>
+<td>Same GRBL <code>$100</code>/<code>$101</code> as MeerK40t —
+calibrate with ruler</td>
+</tr>
+<tr>
+<td><strong>Laser test on panel</strong></td>
+<td>Short beam normal with <code>$32=1</code> (no motion) — use MeerK40t
+<strong>Pulse</strong> for steady test</td>
+</tr>
+<tr>
+<td><strong>WiFi</strong></td>
+<td>TCP device in MeerK40t; dropouts freeze progress — USB for long
+jobs</td>
+</tr>
+<tr>
+<td><strong>ALARM:1</strong></td>
+<td>Console <code>$X</code>, check <code>?</code> → <code>Pn:</code>;
+fix limits/jumpers</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="troubleshooting-the-ui">23. Troubleshooting the UI</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 66%" />
+</colgroup>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Things to check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Panes missing</td>
+<td>View/Pane menu; Window → reset positions</td>
+</tr>
+<tr>
+<td>Cannot click Start</td>
+<td>Connect? Arm? Spool empty? Unassigned shapes?</td>
+</tr>
+<tr>
+<td>Scene empty</td>
+<td>Hide Shapes on; zoom extents; wrong emphasis</td>
+</tr>
+<tr>
+<td>GRBL <code>$</code> won’t save</td>
+<td>One client per port; use console <code>ok</code>; ignore PC
+WriteFile error if <code>$$</code> shows new values</td>
+</tr>
+<tr>
+<td>Inner shapes skip</td>
+<td>Operations tree — assign + Fill on Cut</td>
+</tr>
+<tr>
+<td>Merge can’t undo</td>
+<td>Break Subpaths or node Break</td>
+</tr>
+<tr>
+<td>Slow UI</td>
+<td>Large images; suppress non-visible elements in Preferences</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="screenshot-file-index">24. Screenshot file index</h2>
+<p><strong>Source (your PC):</strong>
+<code>C:\Users\User\Pictures\Screenshots\Meerk40T\</code><br />
+<strong>Copied to repo:</strong>
+<code>images/meerk40t-ui-manual/</code></p>
+<h3 id="named-images-used-in-0">Named images (used in §0)</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>01-main-window.png</code></td>
+<td>Full UI, GRBL-DLC32-400, Sketch31 project</td>
+</tr>
+<tr>
+<td><code>02-file-menu.png</code></td>
+<td>File menu</td>
+</tr>
+<tr>
+<td><code>03-ribbon-project-tab.png</code></td>
+<td>Ribbon Project tab</td>
+</tr>
+<tr>
+<td><code>04-scene-context-menu.png</code></td>
+<td>Scene selection + right-click</td>
+</tr>
+<tr>
+<td><code>05-operations-tree.png</code></td>
+<td>Operations / Elements tree</td>
+</tr>
+<tr>
+<td><code>07-navigation.png</code></td>
+<td>Navigation window</td>
+</tr>
+<tr>
+<td><code>11-grbl-config-device.png</code></td>
+<td>GRBL Configuration — Device</td>
+</tr>
+<tr>
+<td><code>11b-grbl-config-advanced.png</code></td>
+<td>GRBL Configuration — Advanced</td>
+</tr>
+<tr>
+<td><code>11c-grbl-config-effects.png</code></td>
+<td>GRBL Configuration — Effects</td>
+</tr>
+<tr>
+<td><code>11d-grbl-config-default-actions.png</code></td>
+<td>Default Actions at job end</td>
+</tr>
+<tr>
+<td><code>11e-grbl-config-display-options.png</code></td>
+<td>Display Options</td>
+</tr>
+<tr>
+<td><code>13-job-spooler.png</code></td>
+<td>Job Spooler</td>
+</tr>
+<tr>
+<td><code>14-simulation.png</code></td>
+<td>Simulation preview</td>
+</tr>
+<tr>
+<td><code>16-parameter-test.png</code></td>
+<td>Parameter-Test generator</td>
+</tr>
+<tr>
+<td><code>18-view-menu.png</code></td>
+<td>View menu</td>
+</tr>
+<tr>
+<td><code>18b-gui-appearance.png</code></td>
+<td>GUI Appearance submenu</td>
+</tr>
+<tr>
+<td><code>18c-render-options.png</code></td>
+<td>Render-Options submenu</td>
+</tr>
+<tr>
+<td><code>19-edit-menu.png</code></td>
+<td>Edit menu</td>
+</tr>
+<tr>
+<td><code>20-tools-menu.png</code></td>
+<td>Tools menu</td>
+</tr>
+<tr>
+<td><code>assign-operation-submenu.png</code></td>
+<td>Assign Operation</td>
+</tr>
+<tr>
+<td><code>file-import-dxf.png</code></td>
+<td>Import DXF dialog</td>
+</tr>
+<tr>
+<td><code>kerf-test.png</code></td>
+<td>Kerf-Test window</td>
+</tr>
+<tr>
+<td><code>operations-insert-special.png</code></td>
+<td>Operations → special commands</td>
+</tr>
+<tr>
+<td><code>panes-laser-submenu.png</code></td>
+<td>Panes → Laser</td>
+</tr>
+<tr>
+<td><code>panes-menu-overview.png</code></td>
+<td>Panes menu</td>
+</tr>
+<tr>
+<td><code>panes-navigation-submenu.png</code></td>
+<td>Panes → Navigation</td>
+</tr>
+<tr>
+<td><code>tools-burning-submenu.png</code></td>
+<td>Tools → Burning</td>
+</tr>
+<tr>
+<td><code>tools-device-control.png</code></td>
+<td>Tools → Device-Control</td>
+</tr>
+</tbody>
+</table>
+<h3 id="archives-all-originals">Archives (all originals)</h3>
+<ul>
+<li><code>full-screens/</code> — 19 files from <strong>Full
+screens</strong></li>
+<li><code>menu/</code> — 52 files from <strong>Menu</strong></li>
+</ul>
+<h3 id="still-useful-to-capture-later">Still useful to capture
+later</h3>
+<p>Console pane, Device Manager, Material Manager, Network menu,
+Properties window, unassigned warning dialog, Node Edit close-up.</p>
+<h3 id="pdf-build">PDF build</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>powershell <span class="op">-</span>File <span class="st">&quot;C:\Users\User\Ai Projects\meerkat\docs\meerk40t\scripts\build-ui-manual-pdf.ps1&quot;</span></span></code></pre></div>
+<p>Requires <a href="https://pandoc.org/installing.html">Pandoc</a>.</p>
+<hr />
+<h2 id="document-history">Document history</h2>
+<table>
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th>Date</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-06-02</td>
+<td>v1.0 — Initial manual, placeholders, PDF scripts</td>
+</tr>
+<tr>
+<td>2026-06-03</td>
+<td>v1.1 — Merged Andre screenshots (71 files); §0 illustrated
+walkthrough</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>MeerK40t is open source; UI labels may differ slightly by version
+and language pack. When in doubt, trust the on-screen text and the
+console <code>help</code> output.</em></p>
+</body>
+</html>
