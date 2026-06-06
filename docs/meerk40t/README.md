@@ -11,7 +11,7 @@ This folder is **your** reference for asking questions about MeerK40t in Cursor.
 
 Edits to the clone in this workspace (simulation cancel, tips persistence, MKS DLC32 info, etc.) are summarized here:
 
-- **[15-meerkat-local-changes.md](15-meerkat-local-changes.md)** — changelog of fork-style GUI and rule updates (Laser-Control progress bar fix, tree op double-click → Parameter-Test, GRBL overrides, 2026).
+- **[15-meerkat-local-changes.md](15-meerkat-local-changes.md)** — changelog of fork-style GUI and rule updates (GRBL false-connect / sync-mode fix, Laser-Control progress bar, tree op double-click → Parameter-Test, GRBL overrides, 2026).
 - **[16-mks-dlc32-board.md](16-mks-dlc32-board.md)** — MKS DLC32 specs, GRBL setup, **touch-panel laser test (short beam)**, Cloudray **WP**, motors/Vref, limits.
 - **[19-dlc32-eeprom-settings.md](19-dlc32-eeprom-settings.md)** — **Andre’s confirmed DLC32 EEPROM** (full `$$`; Cursor rule `.cursor/rules/dlc32-eeprom-settings.mdc`).
 - **[17-meerkat-dlc32-workflow.md](17-meerkat-dlc32-workflow.md)** — Learning-phase workflow: Material Test, Material Manager presets, **K40 CO2 — MKS DLC32 (400×285 mm)** device profile, macros, **§8 Wi‑Fi/USB**, **§9 inner shapes not cutting**.

@@ -143,6 +143,29 @@ A **real limit switch** tripped (or GRBL still thinks it did). The head may have
 
 **Andre machine:** X and Y limits are **only at top-left** (off the bed). Lower-right has **no** switches — see diagram in [16-mks-dlc32-board.md](16-mks-dlc32-board.md). Alarm there = false **Pn:** or soft travel too long, not the home switches.
 
+### Job runs (head moves) but **laser does not fire**
+
+Touch-panel **weak/strong beam** uses **`M3 S…`** (constant power). MeerK40t defaults to **`M4`** when **Use M3** is off. With **`$32=1` (laser mode)**, **M4** scales PWM by *current speed ÷ programmed speed* — on fast jobs or high **F** values the effective power can drop below what your tube needs to strike, even though the touch panel test works.
+
+| Check | Action |
+|-------|--------|
+| **Use M3** | **Configuration → Device → GRBL-DLC32-400 → Use M3 = On** (Meerkat default for this profile). Restart MeerK40t. Jobs should start with **`M3`**, not **`M4`**. |
+| **Power too low** | Cut/engrave ops need enough **S** for your PSU (often **≥500** on a **$30=1000** board = 50%+). Parameter-Test cells at **S180** (18%) may not fire on CO2. |
+| **Speed vs `$110`/`$111`** | If **F** in the GRBL log is far above **`$110`**/**`$111`**, M4 power stays scaled down. Lower op speed (e.g. **5 mm/s** cut) for tests. |
+| **Adjust sliders** | **Laser** tab → **Adjust** → power/speed sliders at **center (0% override)**, not minimum. |
+| **Chiller / WP** | Water flow must satisfy PSU **WP** during jobs (same as touch test). |
+| **Only border moves** | Inner shapes not assigned to a Cut op → head travels with **S0** — see **§9**. |
+
+**Quick verify:** Connect → **GRBL Controller** → run a tiny job or console:
+
+```text
+gcode M3 S500
+gcode G1 X20 Y-20 F600
+gcode M5
+```
+
+You should see the beam during the **G1** line. If that works but a full job does not, check operation **power**, **enabled**, and **Use M3**.
+
 ---
 
 ## 6. Deferred (by design)
@@ -162,6 +185,46 @@ A **real limit switch** tripped (or GRBL still thinks it did). The head may have
 | Edit **`$`** on board | `http://192.168.10.90/` (port **80**) |
 | Jobs, design, simulation | MeerK40t |
 | Quick jog / macros | Either; one GRBL client at a time on GRBL TCP port **8080** |
+
+### 7.1 ESP3D SD upload (MeerK40t → SD card → run on board)
+
+**Two ports on DLC32:** HTTP **80** (web + SD upload) and GRBL TCP **8080** (live jobs). ESP3D upload uses **port 80 only** — it does not need GRBL Controller connected.
+
+**Enable once:**
+
+1. **Configuration → Device → GRBL-DLC32-400 → ESP3D Upload**
+2. **Enable ESP3D Upload** = On  
+3. **Host** = `192.168.10.90`, **Port** = `80`, **Path** = `/`  
+4. **Test Connection** → should show SD used/free space  
+
+**Upload from MeerK40t:**
+
+- Console: `esp3d_upload_run` (upload only) or `esp3d_upload_run -e` (upload + run)  
+- Or export G-code, then upload via web `http://192.168.10.90/upload`  
+
+Use **LF line endings** (`Configuration → Line Ending → LF` or export `*_lf.gcode`). **Home first** (`$HY` then `$HX`) before SD jobs — exported files do not homing at start.
+
+**Manage / run files in GUI:**
+
+1. **Laser → ESP3D Files** pane (or Window menu)  
+2. **Refresh** — use the **dropdown** to pick a file (label shows **Selected: …**)  
+3. **Execute** → confirm dialog → sends `[ESP220]/filename` to the board  
+
+**Laser on SD jobs:** Files already on the card keep whatever G-code was uploaded. Old exports often use **CR-only line endings** — MKS firmware splits on `\n` only, so **`file6571.gc`-style files can “start” with no motion**. Re-upload via **`esp3d_upload_run -e`** (adds **LF** + **M3** automatically). **Home** (`$HY` / `$HX`) before **Execute**.
+
+**If Execute says success but nothing moves:** delete old SD files (**Clear All** in ESP3D Files pane), plan your job in MeerK40t, then console **`esp3d_upload_run -e`**. Pick the **new** filename in the dropdown — do not re-run old `file*.gc` uploads.
+
+**Console equivalents:**
+
+```text
+esp3d_list
+esp3d_run_file file6571.gc
+esp3d_delete file6571.gc
+```
+
+**If the list shows “Found N file(s)” but no names:** restart MeerK40t after updating (dark-theme list fix in `esp3dfilemgr.py`). You can still run by name: `esp3d_run_file test1_lf.gcode`.
+
+**While an SD job runs:** do not connect MeerK40t GRBL TCP **8080** at the same time — one GRBL client only.
 
 ---
 

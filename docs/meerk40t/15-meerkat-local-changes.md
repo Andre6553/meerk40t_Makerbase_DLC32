@@ -2,7 +2,38 @@
 
 This note records **fork-style edits** made in the Meerkat workspace clone (`meerk40t/`), not upstream MeerK40t releases. Update this file whenever you add or change behavior here.
 
-## 2026-06 — DLC32 EEPROM reference + bed 400×285
+## 2026-06 — CO2 jobs: Use M3 (laser fires on touch panel but not in jobs)
+
+**Files:** `MeerK40t.cfg`, `meerk40t/meerk40t/grbl/plugin.py`, `docs/meerk40t/17-meerkat-dlc32-workflow.md`
+
+**Symptom:** Head moves during a MeerK40t job but the tube does not fire; touch-panel laser test still works.
+
+**Cause:** Touch panel sends **`M3`** (constant PWM). MeerK40t had **`use_m3 = False`** → jobs used **`M4`**, which with **`$32=1`** scales power by speed — often too weak to strike on CO2, especially at low **S** or high **F**.
+
+**Fix:** **`use_m3 = True`** for **GRBL-DLC32-400** (config + DLC32 device profile default). Workflow doc §5 troubleshooting table added.
+
+## 2026-06 — GRBL false “connected” / jog & settings dead (sync mode)
+
+**Files:** `meerk40t/meerk40t/grbl/controller.py`
+
+**Symptom:** GRBL Controller shows green **Connected** (USB or Wi‑Fi) but the log stays empty, **Status** / **Read settings** / jog do nothing.
+
+**Cause:** In **sync** mode, realtime commands (`?`, `!`, `~`, soft reset) were queued in the **forward buffer** and waited forever for `ok` — GRBL answers those with status reports, not `ok`. Boot validation sends `?` at the end; one stuck `?` blocked all later G-code. With **`require_validator = True`** and **`reset_on_connect = False`**, USB attach often never sends a welcome string, so validation never started.
+
+**Fix:** `_expects_ok()` / `_send_realtime()` — status and pause/resume bytes bypass the forward buffer. `_connect_validation_fallback()` starts the `$` boot sequence if no welcome arrives within ~0.5 s.
+
+**Use:** Restart MeerK40t → **Device-Control → GRBL Controller → Connect** → **Status** should show `<--` / `-->` traffic; jog and **Read settings** should work. Console **`grbl_validate`** still forces ready if needed.
+
+## 2026-06 — ESP3D SD jobs: Execute “started” but machine idle
+
+**Files:** `meerk40t/meerk40t/grbl/esp3d_upload.py`, `meerk40t/meerk40t/grbl/gui/esp3dfilemgr.py`, `meerk40t/meerk40t/grbl/plugin.py`, `docs/meerk40t/17-meerkat-dlc32-workflow.md`
+
+**Symptom:** ESP3D Files **Execute** reports success; head/laser do nothing even after homing.
+
+**Cause:** MKS firmware `readFileLine()` splits on `\n` only. Old MeerK40t exports used **CR** line endings → SD file unreadable (silent no-op). Old files also had **M4** instead of **M3** for CO2.
+
+**Fix:** `prepare_sd_gcode_file()` on upload (LF + M3). `execute_file()` uses `PAGEID=0`, parses Alarm/Busy, polls GRBL `?` after ESP220. ESP3D Files pane uses dropdown + clear failure messages. Re-upload via **`esp3d_upload_run -e`**.
+
 
 **Files:** `docs/meerk40t/19-dlc32-eeprom-settings.md`, `meerk40t/meerk40t/grbl/plugin.py`, `docs/meerk40t/17-meerkat-dlc32-workflow.md`, `docs/meerk40t/16-mks-dlc32-board.md`
 
