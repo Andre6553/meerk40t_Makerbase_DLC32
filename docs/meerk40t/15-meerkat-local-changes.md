@@ -2,6 +2,14 @@
 
 This note records **fork-style edits** made in the Meerkat workspace clone (`meerk40t/`), not upstream MeerK40t releases. Update this file whenever you add or change behavior here.
 
+## 2026-06 — Scene right-click: Move laser head here
+
+**Files:** `meerk40t/meerk40t/gui/wxmscene.py`, `meerk40t/meerk40t/gui/scenewidgets/elementswidget.py`
+
+**Behavior:** Right-click on the main scene grid (empty area, no tool active) → **Move laser head here** sends `move_absolute` to the click position (same coordinate path as **Tools → Relocate**). Position is clamped to the device bed in scene space.
+
+**Use:** Connect GRBL first; spooler must be idle (not mid-job). Homed machine recommended before relying on coordinates.
+
 ## 2026-06 — CO2 jobs: Use M3 (laser fires on touch panel but not in jobs)
 
 **Files:** `MeerK40t.cfg`, `meerk40t/meerk40t/grbl/plugin.py`, `docs/meerk40t/17-meerkat-dlc32-workflow.md`

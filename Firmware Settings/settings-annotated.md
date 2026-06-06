@@ -1,68 +1,98 @@
 # GRBL EEPROM — annotated (`Firmware Settings/settings`)
 
-**Source:** live dump in `settings` (values not edited here).  
-**Board UI:** ESP32-WEB → Control → SD / File / Settings.  
-**When values change:** update `settings` first, then regenerate this file (say **`/settings`** in Cursor).
+**Machine:** K40 CO2, MKS DLC32 (Grbl 1.1h), Andre — Mossel Bay workspace  
+**Source:** live `$$` dump in [`settings`](settings) (canonical — edit that file when EEPROM changes).  
+**Board UI:** ESP32-WEB → Control → SD / File / Settings, or MeerK40t console **`$$`**.  
+**Regenerate this file:** say **`/settings`** in Cursor after updating `settings`.
 
 ---
+
+## Quick reference (Andre)
+
+| Topic | Values |
+|-------|--------|
+| **Bed travel** | X **405 mm** (`$130`), Y **285 mm** (`$131`) |
+| **Steps/mm** | X **157.210** (`$100`), Y **159.600** (`$101`) |
+| **Max speed** | X **5500 mm/min (~91.7 mm/s)** (`$110`), Y **5000 mm/min (~83.3 mm/s)** (`$111`) |
+| **Acceleration** | X **500** (`$120`), Y **400** (`$121`) mm/s² |
+| **Laser mode** | **`$32=1`** — PWM scales with speed on **M4** |
+| **PWM range** | **`$30=1000`** (100%), **`$31=50`** (min) |
+| **Homing** | **`$22=1`**, **`$23=1`** — use **`$HY`** then **`$HX`** (not **`$H`**) |
+| **Jog direction** | **`$3=0`** — leave alone if jog/touch screen are correct |
+| **Limits** | **`$20=0`**, **`$21=0`** (off while testing — enable when travel trusted) |
+| **MeerK40t** | Bed **405×285 mm**, home **top-left**, **Flip Y on** |
+
+**Homing procedure**
+
+1. **`$X`** — clear alarm  
+2. **`?`** — **`Pn:`** must be **empty** at rest  
+3. **`$HY`** → wait `ok`  
+4. **`$HX`** → wait `ok`  
+5. **`?`** — expect **`MPos:0.000,0.000,0.000`**
+
+---
+
+## Annotated settings table
 
 | Setting | Value | Unit | Parameter | Description |
 |---------|------:|------|-----------|-------------|
-| $0 | 10 | microseconds | Step pulse time | Sets time length per step. Minimum 3usec. |
-| $1 | 25 | milliseconds | Step idle delay | Sets a short hold delay when stopping to let dynamics settle before disabling steppers. Value 255 keeps motors enabled with no delay. |
-| $2 | 0 | mask | Step pulse invert | Inverts the step signal. Set axis bit to invert (00000ZYX). |
-| $3 | 0 | mask | Step direction invert | Inverts the direction signal. Set axis bit to invert (00000ZYX). |
-| $4 | 0 | boolean | Invert step enable pin | Inverts the stepper driver enable pin signal. |
-| $5 | 0 | boolean | Invert limit pins | Inverts all of the limit input pins. |
-| $6 | 0 | boolean | Invert probe pin | Inverts the probe input pin signal. |
-| $10 | 1 | mask | Status report options | Alters data included in status reports. |
-| $11 | 0.010 | mm | Junction deviation | Sets how fast Grbl travels through consecutive motions. Lower value slows it down. |
-| $12 | 0.002 | mm | Arc tolerance | Sets the G2 and G3 arc tracing accuracy based on radial error. Beware: A very small value may affect performance. |
-| $13 | 0 | boolean | Report in inches | Enables inch units when returning any position and rate value that is not a settings value. |
-| $20 | 0 | boolean | Soft limits enable | Enables soft limits checks within machine travel and sets alarm when exceeded. Requires homing. |
-| $21 | 0 | boolean | Hard limits enable | Enables hard limits. Immediately halts motion and throws an alarm when switch is triggered. |
-| $22 | 1 | boolean | Homing cycle enable | Enables homing cycle. Requires limit switches on all axes. |
-| $23 | 1 | mask | Homing direction invert | Homing searches for a switch in the positive direction. Set axis bit (00000ZYX) to search in negative direction. |
-| $24 | 200.000 | mm/min | Homing locate feed rate | Feed rate to slowly engage limit switch to determine its location accurately. |
-| $25 | 500.000 | mm/min | Homing search seek rate | Seek rate to quickly find the limit switch before the slower locating phase. |
-| $26 | 250.000 | milliseconds | Homing switch debounce delay | Sets a short delay between phases of homing cycle to let a switch debounce. |
-| $27 | 5.000 | mm | Homing switch pull-off distance | Retract distance after triggering switch to disengage it. Homing will fail if switch isn't cleared. |
-| $28 | 1000.000 | — | *(ESP32-WEB extension)* | Board-specific setting; not in standard Grbl wiki table. |
-| $30 | 1000.000 | RPM | Maximum spindle speed | Maximum spindle speed. Sets PWM to 100% duty cycle. |
-| $31 | 50.000 | RPM | Minimum spindle speed | Minimum spindle speed. Sets PWM to 0.4% or lowest duty cycle. |
-| $32 | 1 | boolean | Laser-mode enable | Enables laser mode. Consecutive G1/2/3 commands will not halt when spindle speed is changed. |
-| $38 | 0 | — | *(ESP32-WEB extension)* | Board-specific setting; not in standard Grbl wiki table. |
-| $40 | 1 | — | *(ESP32-WEB extension)* | Board-specific setting; not in standard Grbl wiki table. |
-| $43 | 0 | — | *(ESP32-WEB extension)* | Board-specific setting; not in standard Grbl wiki table. |
-| $49 | 0 | — | *(ESP32-WEB extension)* | Board-specific setting; not in standard Grbl wiki table. |
-| $100 | 157.210 | steps/mm | X-axis travel resolution | X-axis travel resolution in steps per millimeter. |
-| $101 | 159.600 | steps/mm | Y-axis travel resolution | Y-axis travel resolution in steps per millimeter. |
-| $102 | 100.000 | steps/mm | Z-axis travel resolution | Z-axis travel resolution in steps per millimeter. |
-| $103 | 100.000 | steps/mm | A-axis travel resolution | A-axis travel resolution in steps per millimeter. |
-| $104 | 100.000 | steps/mm | B-axis travel resolution | B-axis travel resolution in steps per millimeter. |
-| $105 | 100.000 | steps/mm | C-axis travel resolution | C-axis travel resolution in steps per millimeter. |
-| $110 | 5000.000 | mm/min | X-axis maximum rate | X-axis maximum rate. Used as G0 rapid rate. |
-| $111 | 5000.000 | mm/min | Y-axis maximum rate | Y-axis maximum rate. Used as G0 rapid rate. |
-| $112 | 6000.000 | mm/min | Z-axis maximum rate | Z-axis maximum rate. Used as G0 rapid rate. |
-| $113 | 1000.000 | mm/min | A-axis maximum rate | A-axis maximum rate. Used as G0 rapid rate. |
-| $114 | 1000.000 | mm/min | B-axis maximum rate | B-axis maximum rate. Used as G0 rapid rate. |
-| $115 | 1000.000 | mm/min | C-axis maximum rate | C-axis maximum rate. Used as G0 rapid rate. |
-| $120 | 350.000 | mm/sec² | X-axis acceleration | X-axis acceleration. Used for motion planning to not exceed motor torque and lose steps. |
-| $121 | 350.000 | mm/sec² | Y-axis acceleration | Y-axis acceleration. Used for motion planning to not exceed motor torque and lose steps. |
-| $122 | 3500.000 | mm/sec² | Z-axis acceleration | Z-axis acceleration. Used for motion planning to not exceed motor torque and lose steps. |
-| $123 | 200.000 | mm/sec² | A-axis acceleration | A-axis acceleration. Used for motion planning to not exceed motor torque and lose steps. |
-| $124 | 200.000 | mm/sec² | B-axis acceleration | B-axis acceleration. Used for motion planning to not exceed motor torque and lose steps. |
-| $125 | 200.000 | mm/sec² | C-axis acceleration | C-axis acceleration. Used for motion planning to not exceed motor torque and lose steps. |
-| $130 | 405.000 | mm | X-axis maximum travel | Maximum X-axis travel from homing switch. Determines valid machine space for soft limits and homing search distances. |
-| $131 | 285.000 | mm | Y-axis maximum travel | Maximum Y-axis travel from homing switch. Determines valid machine space for soft limits and homing search distances. |
-| $132 | 300.000 | mm | Z-axis maximum travel | Maximum Z-axis travel from homing switch. Determines valid machine space for soft limits and homing search distances. |
-| $133 | 300.000 | mm | A-axis maximum travel | Maximum A-axis travel from homing switch. Determines valid machine space for soft limits and homing search distances. |
-| $134 | 300.000 | mm | B-axis maximum travel | Maximum B-axis travel from homing switch. Determines valid machine space for soft limits and homing search distances. |
-| $135 | 300.000 | mm | C-axis maximum travel | Maximum C-axis travel from homing switch. Determines valid machine space for soft limits and homing search distances. |
+| $0 | 10 | µs | Step pulse time | Length of each step pulse. Minimum ~3 µs. |
+| $1 | 25 | ms | Step idle delay | Delay before steppers disable after a stop. **255** = stay enabled. |
+| $2 | 0 | mask | Step pulse invert | Invert step pin per axis (bits ZYX). |
+| $3 | 0 | mask | Step direction invert | Invert dir pin for **jog/cuts** (not homing — see `$23`). |
+| $4 | 0 | bool | Invert step enable | Inverts driver ENABLE pin. |
+| $5 | 0 | bool | Invert limit pins | Inverts all limit inputs. |
+| $6 | 0 | bool | Invert probe pin | Inverts probe input. |
+| $10 | 1 | mask | Status report options | What appears in `?` status reports. |
+| $11 | 0.010 | mm | Junction deviation | Cornering smoothness; lower = slower through joins. |
+| $12 | 0.002 | mm | Arc tolerance | G2/G3 arc fit error. |
+| $13 | 0 | bool | Report in inches | **0** = mm for positions and rates. |
+| $20 | 0 | bool | Soft limits | **Off** — enable **1** when homing + travel verified. |
+| $21 | 0 | bool | Hard limits | **Off** — enable **1** when limit wiring/jumpers are clean. |
+| $22 | 1 | bool | Homing enable | Homing required for soft limits. |
+| $23 | 1 | mask | Homing dir invert | Homing search direction only. Andre: **X inverted**, Y OK. |
+| $24 | 200.000 | mm/min | Homing locate feed | Slow feed when engaging switch. |
+| $25 | 500.000 | mm/min | Homing seek feed | Fast seek before locate. |
+| $26 | 250.000 | ms | Homing debounce | Pause between homing phases. |
+| $27 | 5.000 | mm | Homing pull-off | Back off after switch trip. |
+| $28 | 1000.000 | — | *(ESP32 extension)* | Board-specific; not in standard Grbl wiki. |
+| $30 | 1000.000 | RPM | Max spindle/laser | **S1000** = 100% PWM duty. |
+| $31 | 50.000 | RPM | Min spindle/laser | Minimum PWM floor when laser on. |
+| $32 | 1 | bool | Laser mode | **On** — consecutive G1 moves keep laser state; **M4** power ∝ speed. |
+| $38 | 0 | — | *(ESP32 extension)* | Board-specific. |
+| $40 | 1 | — | *(ESP32 extension)* | Board-specific. |
+| $43 | 0 | — | *(ESP32 extension)* | Board-specific. |
+| $49 | 0 | — | *(ESP32 extension)* | Board-specific. |
+| $100 | 157.210 | steps/mm | X resolution | Calibrated — trust ruler over theory. |
+| $101 | 159.600 | steps/mm | Y resolution | Calibrated. |
+| $102 | 100.000 | steps/mm | Z resolution | Z not used (AC focus motor). |
+| $103 | 100.000 | steps/mm | A resolution | Unused. |
+| $104 | 100.000 | steps/mm | B resolution | Unused. |
+| $105 | 100.000 | steps/mm | C resolution | Unused. |
+| $110 | 5500.000 | mm/min | X max rate | **Cap for X rapids and cuts** (~91.7 mm/s). |
+| $111 | 5000.000 | mm/min | Y max rate | Y cap (~83.3 mm/s). |
+| $112 | 6000.000 | mm/min | Z max rate | Z stepper unused on this machine. |
+| $113 | 1000.000 | mm/min | A max rate | Unused. |
+| $114 | 1000.000 | mm/min | B max rate | Unused. |
+| $115 | 1000.000 | mm/min | C max rate | Unused. |
+| $120 | 500.000 | mm/s² | X acceleration | How fast X ramps; does not raise `$110` cap. |
+| $121 | 400.000 | mm/s² | Y acceleration | Y ramp rate. |
+| $122 | 3500.000 | mm/s² | Z acceleration | Unused axis. |
+| $123 | 200.000 | mm/s² | A acceleration | Unused. |
+| $124 | 200.000 | mm/s² | B acceleration | Unused. |
+| $125 | 200.000 | mm/s² | C acceleration | Unused. |
+| $130 | 405.000 | mm | X max travel | Match MeerK40t device width. |
+| $131 | 285.000 | mm | Y max travel | Into bed = **Y negative** (e.g. toward **−285**). |
+| $132 | 300.000 | mm | Z max travel | Unused. |
+| $133 | 300.000 | mm | A max travel | Unused. |
+| $134 | 300.000 | mm | B max travel | Unused. |
+| $135 | 300.000 | mm | C max travel | Unused. |
 
 ---
 
-## Raw dump (canonical — do not edit here; edit `settings`)
+## Raw dump (mirror of canonical `settings`)
+
+Do not edit values here — update [`settings`](settings) first, then regenerate this file.
 
 ```text
 $0=10
@@ -98,14 +128,14 @@ $102=100.000
 $103=100.000
 $104=100.000
 $105=100.000
-$110=5000.000
+$110=5500.000
 $111=5000.000
 $112=6000.000
 $113=1000.000
 $114=1000.000
 $115=1000.000
-$120=350.000
-$121=350.000
+$120=500.000
+$121=400.000
 $122=3500.000
 $123=200.000
 $124=200.000
@@ -117,3 +147,11 @@ $133=300.000
 $134=300.000
 $135=300.000
 ```
+
+---
+
+## Related docs
+
+- MeerK40t: [`docs/meerk40t/19-dlc32-eeprom-settings.md`](../docs/meerk40t/19-dlc32-eeprom-settings.md)  
+- Board + motors: [`docs/meerk40t/16-mks-dlc32-board.md`](../docs/meerk40t/16-mks-dlc32-board.md)  
+- Workflow: [`docs/meerk40t/17-meerkat-dlc32-workflow.md`](../docs/meerk40t/17-meerkat-dlc32-workflow.md)

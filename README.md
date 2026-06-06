@@ -129,12 +129,13 @@ Do **not** use the PSU **V** pin on the S-TTL-V connector for Cloudray wiring.
 | **`$130`** | **405** | X max travel (mm) |
 | **`$131`** | **285** | Y max travel (mm) |
 | **`$32`** | **1** | Laser mode (required) |
+| **`$110` / `$111`** | **5500 / 5000** | X/Y max rate (mm/min) — **~92 / ~83 mm/s** caps |
 | **`$30` / `$31`** | **1000 / 50** | Spindle/laser PWM range |
 | **`$3`** | **0** | Step direction invert — **jog + touch panel** (do not change if jog is correct) |
 | **`$23`** | **1** | Homing direction invert — **homing only** (X inverted; Y correct) |
 | **`$22`** | **1** | Homing enabled |
 | **`$20` / `$21`** | **0 / 0** in test snapshot | Soft/hard limits — enable **`$20=1`** and **`$21=1`** when travel is verified |
-| **`$120` / `$121`** | **350** | X/Y acceleration (mm/s²) — tune down if motors buzz |
+| **`$120` / `$121`** | **500 / 400** | X/Y acceleration (mm/s²) — tune down if motors buzz or skip steps |
 
 ### Homing procedure (critical)
 
@@ -217,6 +218,14 @@ All code changes are in **[Andre6553/meerk40t](https://github.com/Andre6553/meer
 | **Tips persistence** | “Show tips at startup” saves immediately |
 | **Ribbon delayed tooltips** | Long-hover help on ribbon buttons |
 | **Scene startup crash fix** | No crash on 0×0 window before layout |
+| **Move laser head here** | Right-click the scene grid → move head to click position (`move_absolute`; same coords as **Relocate** tool) |
+
+### EEPROM docs
+
+| Change | What it does |
+|--------|--------------|
+| **`/settings` in Cursor** | Regenerates [`Firmware Settings/settings-annotated.md`](Firmware%20Settings/settings-annotated.md) from the live `$$` dump |
+| **Annotated EEPROM table** | Quick reference + per-setting descriptions for Andre’s board (bed, homing, speeds, laser mode) |
 
 Full dated changelog: [`docs/meerk40t/15-meerkat-local-changes.md`](docs/meerk40t/15-meerkat-local-changes.md)
 
