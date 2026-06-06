@@ -1,6 +1,12 @@
-# Meerkat — Andre's MeerK40t + MKS DLC32 workspace
+# meerk40t_Makerbase_DLC32 — Andre's MeerK40t + MKS DLC32 workspace
 
-Local workspace for **K40 CO2 + MKS DLC32** (400×285 mm), MeerK40t fork, docs, firmware reference, and Cursor rules.
+Local workspace for **K40 CO2 + MKS DLC32** (405×285 mm), MeerK40t fork, docs, firmware reference, and Cursor rules.
+
+**GitHub:** https://github.com/Andre6553/meerk40t_Makerbase_DLC32
+
+```powershell
+git clone https://github.com/Andre6553/meerk40t_Makerbase_DLC32.git
+```
 
 ## Layout
 
