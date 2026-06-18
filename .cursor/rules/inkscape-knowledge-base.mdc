@@ -1,0 +1,46 @@
+---
+description: Inkscape — consult local docs first; use Learn links and Peppertop index
+alwaysApply: true
+---
+
+# Inkscape knowledge base (this workspace)
+
+When the user's question is about **Inkscape** (vector prep for laser/CNC/print, SVG, tracing, paths, MeerK40t artwork workflow, or the clone under `inkscape-master/`):
+
+## 1. Look up first
+
+- Read **`docs/inkscape/README.md`** (index + canonical URLs from **`inkscape-master/Learn`**).
+- Search **`docs/inkscape/`** before answering from memory alone:
+  - `01-core-workflows-and-shortcuts.md` — basics, advanced paths, tips
+  - `02-shapes-calligraphy-interpolate.md` — shape tools, calligraphy, interpolate
+  - `03-tracing-bitmaps-and-pixel-art.md` — Potrace, pixel art, centerline
+  - `04-troubleshooting-and-performance.md` — invisible objects, tool styles, slowdowns, LaTeX
+  - `05-peppertop-fcm-index.md` — Full Circle #60–227 topic map
+
+## 2. Official tutorial URLs (authoritative)
+
+From `inkscape-master/Learn` — fetch or cite when local docs are thin:
+
+- Basic, Shapes, Advanced, Tracing, Pixel art, Calligraphy, Interpolate, Elements, Tips: `https://inkscape.org/doc/tutorials/…`
+- Customize tools, performance, invisible objects, selection, LaTeX: `https://inkscape.org/learn/tutorials/…`
+- Extended series index: https://www.peppertop.com/blog/?p=1563
+
+Current upstream reference version in those tutorials: **Inkscape 1.4.x**.
+
+## 3. If the topic is missing or too thin
+
+- Deep dive the relevant official URL or Peppertop FCM issue (from index).
+- **Update the knowledge base**: extend the best existing file under **`docs/inkscape/`** or add **`docs/inkscape/NN-topic.md`**.
+- **Update `docs/inkscape/README.md`** contents table when adding a file.
+
+## 4. Pre-edit backups (mandatory)
+
+Follow **`.cursor/rules/meerkat-backup-before-edit.mdc`** before editing `docs/inkscape/`, `inkscape-master/Learn`, or `.cursor/rules/inkscape-knowledge-base.mdc`. Rotate **`.bak.1` → `.bak.2` → `.bak.3`**.
+
+## 5. Laser / MeerK40t tie-in
+
+Andre's K40 workflow: prepare art in Inkscape (mm units, clean paths, trace/simplify as needed) → import SVG into MeerK40t. Cross-check bed size and home corner with **`dlc32-eeprom-settings.mdc`** and **`docs/meerk40t/`** when the question spans Inkscape + laser.
+
+## 6. When this rule does *not* apply
+
+Unrelated chats with no Inkscape / SVG / vector-art prep tie-in — do not force doc updates.

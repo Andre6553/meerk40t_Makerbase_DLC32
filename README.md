@@ -198,6 +198,7 @@ All code changes are in **[Andre6553/meerk40t](https://github.com/Andre6553/meer
 | **TCP port 8080** | `grbl/tcp_connection.py`, `plugin.py` | Auto-probes **8080** then 23; matches ESP32-WEB |
 | **Wi‑Fi wake before connect** | `grbl/tcp_connection.py`, `scripts/wake-mks-dlc32.ps1` | HTTP ping wakes ESP32; retries TCP; removed 8 s read timeout that dropped Wi‑Fi mid-`$$` |
 | **MPos sync** | `grbl/controller.py` | MeerK40t position tracks board after touch-panel moves |
+| **ESP3D upload filename dialog** | `grbl/gui/esp3dupload.py`, `grbl/gui/gui.py`, `grbl/esp3d_upload.py` | Toolbar upload prompts for **8.3** SD name (project default); remembers last name for reruns |
 | **Y jog / Flip Y fix** | `grbl/driver.py`, `controller.py` | Confined jog uses bed coords; warns if Flip Y off with negative MPos Y |
 | **Confined jog crash fix** | `grbl/driver.py` | Parses `"405mm"` bed strings correctly |
 | **Override direction fix** | `grbl/driver.py`, `laserpanel.py` | GRBL **0x9A/0x9B** power override matches GRBL 1.1; 5% steps + typed Set |
@@ -219,6 +220,7 @@ All code changes are in **[Andre6553/meerk40t](https://github.com/Andre6553/meer
 | **Ribbon delayed tooltips** | Long-hover help on ribbon buttons |
 | **Scene startup crash fix** | No crash on 0×0 window before layout |
 | **Move laser head here** | Right-click the scene grid → move head to click position (`move_absolute`; same coords as **Relocate** tool) |
+| **ESP3D upload filename** | Toolbar **ESP3D Upload+Run** → dialog for SD name (8.3); default from project; overwrite = easy rerun |
 
 ### EEPROM docs
 

@@ -2,6 +2,49 @@
 
 This note records **fork-style edits** made in the Meerkat workspace clone (`meerk40t/`), not upstream MeerK40t releases. Update this file whenever you add or change behavior here.
 
+## 2026-06 — Plan Export: no UI freeze on large jobs (v0.9.9003)
+
+**Files:** `meerk40t/meerk40t/gui/laserpanel.py`, `meerk40t/meerk40t/grbl/device.py`, `meerk40t/meerk40t/grbl/esp3d_upload.py`, `meerk40t/meerk40t/main.py`
+
+**Problem:** **Plan → Export** ran on the UI thread. Huge rasters froze MeerK40t (“Not responding”). SD patch then loaded the **entire file into RAM** (second long freeze).
+
+**Fix:**
+
+- Export runs **`threaded plan… save_job`** — UI stays usable; **Thread Info** window can show the task
+- Console: `Exporting to …`, `Patching for MKS SD card…`, then success/fail, then `Finished command … after N sec`
+- **`prepare_sd_gcode_file`** streams line-by-line (no 300 MB load into memory)
+
+## 2026-06 — Plan → Export SD-ready for MKS DLC32 (v0.9.9002)
+
+**Files:** `meerk40t/meerk40t/grbl/device.py`, `meerk40t/meerk40t/grbl/esp3d_upload.py`, `meerk40t/meerk40t/main.py`
+
+**Problem:** **Laser → Plan → Export** wrote **CR-only** G-code with trailing **`G28`**. MKS SD firmware reads lines on **`\\n` only**, so uploaded files often **Execute with no motion** (same as old `tree.gcode` / `sq2.gc` failures).
+
+**Fix:**
+
+- After every successful **Export**, when **Prepare Plan exports for SD card** is on (default): **LF** line endings, **M3** (if **Use M3** is on), **`G28` removed**
+- Default **Line Ending** for new GRBL configs changed from **CR** → **LF**
+- Console confirms: `Export succeeded (SD-ready): …` and homing reminder (**$HY** / **$HX** before Execute)
+
+**Setting:** **Configuration → Device → ESP3D Upload → Prepare Plan exports for SD card** (disable only if you need raw CR exports for another host).
+
+**Note:** Huge raster jobs (e.g. photo engraves **100+ MB**) may still fail **web upload** — use **ESP3D Upload** (right-click = upload only) or stream over **:8080**.
+
+## 2026-06 — ESP3D upload: choose SD filename (v0.9.9001)
+
+**Files:** `meerk40t/meerk40t/grbl/gui/esp3dupload.py`, `meerk40t/meerk40t/grbl/gui/gui.py`, `meerk40t/meerk40t/grbl/esp3d_upload.py`, `meerk40t/meerk40t/grbl/plugin.py`, `meerk40t/meerk40t/main.py`
+
+**Problem:** **ESP3D Upload+Run** auto-named SD files (`file3a7f.gc`, etc.), so **ESP3D Files** was hard to use for reruns.
+
+**Fix:** Toolbar button now opens a **filename dialog** before upload:
+
+- Default from **project name** (window title label, trimmed to **8.3** — e.g. `example edit` → `example.gc`) or **last upload** this session
+- You can edit the name; **same name overwrites** on the SD card (repeat jobs easily)
+- **Left click:** upload + run; **right click:** upload only (unchanged)
+- Console **`esp3d_upload_run`** without **`-f`** still auto-generates a name
+
+**8.3 rule:** max **8** characters before **`.gc`** (MKS SD convention).
+
 ## 2026-06 — Scene right-click: Move laser head here
 
 **Files:** `meerk40t/meerk40t/gui/wxmscene.py`, `meerk40t/meerk40t/gui/scenewidgets/elementswidget.py`

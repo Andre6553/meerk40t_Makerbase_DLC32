@@ -1,0 +1,50 @@
+---
+description: Bump MeerK40t APPLICATION_VERSION on every fork code change (0.9.900x)
+globs: meerk40t/**/*
+alwaysApply: false
+---
+
+# MeerK40t — version bump on fork updates
+
+When you **change MeerK40t fork code** (behavior, defaults, drivers, GUI, console, plugins under the clone), **increment the splash/title-bar version** in the same edit batch.
+
+## Canonical version file
+
+**`meerk40t/meerk40t/main.py`** — Andre’s fork: https://github.com/Andre6553/meerk40t
+
+```python
+APPLICATION_VERSION = "0.9.9000"
+```
+
+At runtime MeerK40t appends ` git <branch>` when run from a git tree — **do not** put `git main` in the string; leave that logic alone.
+
+## Bump rule
+
+| Current | Next after one update |
+|---------|------------------------|
+| `0.9.9000` | `0.9.9001` |
+| `0.9.9001` | `0.9.9002` |
+
+- Format: **`0.9.90XX`** — increment **only the last digit** (build counter) by **+1** per functional change batch.
+- Read the current value from `main.py` before editing; never guess from docs or screenshots.
+- **One bump per task/session** that changes fork code (not per file). Multiple related files in one job = one increment.
+- **Do not bump** for docs-only, EEPROM, firmware, or meerkat workspace files **outside** `meerk40t/`.
+- **Do bump** when any `meerk40t/**/*.py` (or fork assets that affect the running app) changes behavior the user will see.
+
+## Agent checklist (every MeerK40t code edit)
+
+1. **Backup** `meerk40t/meerk40t/main.py` per **`meerkat-backup-before-edit.mdc`** (if not already backed up this task).
+2. **Edit** the fork change(s).
+3. **Bump** `APPLICATION_VERSION` in `main.py` (+1 on last digit).
+4. **Docs** (same batch): note new version in **`docs/meerk40t/15-meerkat-local-changes.md`** and refresh **`docs/meerk40t/README.md`** “Recent local changes” if the UI manual or README cites a version string.
+
+## Where the user sees it
+
+- Splash: `Start MeerK40t` / `V. 0.9.9001 git main`
+- Window title: `MeerK40t v0.9.9001 git main`
+- About dialog, crash logs
+
+## Related
+
+- **`meerk40t-knowledge-base.mdc`** — docs + backup policy
+- **`meerkat-backup-before-edit.mdc`** — `.bak.1`–`.bak.3` rotation

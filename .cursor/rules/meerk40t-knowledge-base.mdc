@@ -51,6 +51,8 @@ This yields `file.py.bak.1` (newest snapshot), `.bak.2`, `.bak.3`; the previous 
 
 When you change **behavior, defaults, or workflows** under `meerk40t/` in this workspace (or other project code the user relies on), **update documentation in the same change batch** so READMEs stay truthful.
 
+**Version bump:** Follow **`meerk40t-version-bump.mdc`** — increment `APPLICATION_VERSION` in `meerk40t/meerk40t/main.py` (e.g. `0.9.9000` → `0.9.9001`) on every fork code change batch.
+
 - **Index:** Update **`docs/meerk40t/README.md`** — add or refresh the **Recent local changes** pointer and the **Contents** table when you add a new topic file.
 - **Detail:** Add or extend a topic under **`docs/meerk40t/`** (for example **`15-meerkat-local-changes.md`**) with what changed, which files, user-visible behavior, and known limits.
 - **Root README:** If the workspace root gains or already has a **`README.md`** that describes this project, update it when those entry-level docs should mention the change.

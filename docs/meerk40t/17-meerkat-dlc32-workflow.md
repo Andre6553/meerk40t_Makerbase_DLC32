@@ -199,10 +199,14 @@ You should see the beam during the **G1** line. If that works but a full job doe
 
 **Upload from MeerK40t:**
 
-- Console: `esp3d_upload_run` (upload only) or `esp3d_upload_run -e` (upload + run)  
+- **Laser → Plan → Export** — writes G-code then **auto-patches for MKS SD** (LF, M3, no G28) when **Prepare Plan exports for SD card** is on (v0.9.9002+). Use **`.gc`** 8.3 name if uploading via web UI.
+- **Toolbar → ESP3D Upload+Run** — dialog asks for SD filename (8.3, e.g. `logo01.gc`); default from project name or last upload; **left click** = upload + run, **right click** = upload only  
+- Console: `esp3d_upload_run -f logo01.gc -e` (named) or `esp3d_upload_run -e` (auto random name)  
 - Or export G-code, then upload via web `http://192.168.10.90/upload`  
 
-Use **LF line endings** (`Configuration → Line Ending → LF` or export `*_lf.gcode`). **Home first** (`$HY` then `$HX`) before SD jobs — exported files do not homing at start.
+**Line Ending:** default is now **LF** for new device configs. Old **CR** exports must be re-exported or re-uploaded via **`esp3d_upload_run`** — do not reuse **`sq2.gc`**-style CR files. **Home first** (`$HY` then `$HX`) before SD jobs — exported files do not homing at start.
+
+**Tip:** Reuse the **same filename** when you rerun a job — upload overwrites that file on the SD card, so **ESP3D Files** stays readable.
 
 **Manage / run files in GUI:**
 
@@ -210,7 +214,7 @@ Use **LF line endings** (`Configuration → Line Ending → LF` or export `*_lf.
 2. **Refresh** — use the **dropdown** to pick a file (label shows **Selected: …**)  
 3. **Execute** → confirm dialog → sends `[ESP220]/filename` to the board  
 
-**Laser on SD jobs:** Files already on the card keep whatever G-code was uploaded. Old exports often use **CR-only line endings** — MKS firmware splits on `\n` only, so **`file6571.gc`-style files can “start” with no motion**. Re-upload via **`esp3d_upload_run -e`** (adds **LF** + **M3** automatically). **Home** (`$HY` / `$HX`) before **Execute**.
+**Laser on SD jobs:** Re-export or use **ESP3D Upload** after v0.9.9002 — **Plan → Export** now patches LF + M3 and removes **G28**. Old **CR-only** files on the card (`sq2.gc`, `tree.gcode`) will still fail — **Clear All**, export fresh, upload again. **Home** (`$HY` / `$HX`) before **Execute**.
 
 **If Execute says success but nothing moves:** delete old SD files (**Clear All** in ESP3D Files pane), plan your job in MeerK40t, then console **`esp3d_upload_run -e`**. Pick the **new** filename in the dropdown — do not re-run old `file*.gc` uploads.
 
