@@ -2,6 +2,8 @@
 
 This note records **fork-style edits** made in the Meerkat workspace clone (`meerk40t/`), not upstream MeerK40t releases. Update this file whenever you add or change behavior here.
 
+**Also embedded** in the repository root [`README.md`](../../README.md#fork-changelog-meerk40t) — keep both in sync when you add changelog entries.
+
 ## 2026-06 — Living Hinges: Apply to scene button visible (v0.9.9034)
 
 **File:** `meerk40t/meerk40t/tools/livinghinges.py`
