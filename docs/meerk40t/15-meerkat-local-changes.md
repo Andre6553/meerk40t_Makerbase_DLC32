@@ -2,6 +2,22 @@
 
 This note records **fork-style edits** made in the Meerkat workspace clone (`meerk40t/`), not upstream MeerK40t releases. Update this file whenever you add or change behavior here.
 
+## 2026-06 — Living Hinges: Apply to scene button visible (v0.9.9034)
+
+**File:** `meerk40t/meerk40t/tools/livinghinges.py`
+
+**Problem:** **Generate** sat below the left-column sliders and was often off-screen; users saw preview only with no obvious way to commit the pattern.
+
+**Fix:** Renamed **Generate** → **Apply to scene**; moved it (with **Close**) under the **Preview** panel so it stays visible. Default window height 480 px.
+
+## 2026-06 — Kerf-Test Create Pattern crash fix (v0.9.9033)
+
+**File:** `meerk40t/meerk40t/tools/kerftest.py`
+
+**Problem:** **Kerf-Test** → **Create Pattern** crashed with `AttributeError: 'Context' object has no attribute 'signal_refresh'`.
+
+**Fix:** After generating the test pattern, refresh the scene with `refresh_scene` (same as **Parameter-Test**), not the non-existent `context.signal_refresh()`.
+
 ## 2026-06 — Line tool: click on existing geometry + precise preview (v0.9.9032)
 
 **Files:** `meerk40t/meerk40t/gui/scenewidgets/selectionwidget.py`, `meerk40t/meerk40t/gui/scenewidgets/rectselectwidget.py`, `meerk40t/meerk40t/gui/toolwidgets/toolpointlistbuilder.py`

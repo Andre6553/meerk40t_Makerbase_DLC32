@@ -220,6 +220,8 @@ All code changes are in **[Andre6553/meerk40t](https://github.com/Andre6553/meer
 | **Camera Calibration & bed overlay** | Perspective corners, **Update image**, fine alignment mm (v0.9.9009–9027) |
 | **Tips persistence** | “Show tips at startup” saves immediately |
 | **Ribbon delayed tooltips** | Long-hover help on ribbon buttons |
+| **Kerf-Test Create Pattern** | No crash on apply; scene refresh matches Parameter-Test (v0.9.9033) |
+| **Living Hinges Apply to scene** | Renamed from **Generate**; button under **Preview** so commit is visible (v0.9.9034) |
 | **Scene startup crash fix** | No crash on 0×0 window before layout |
 | **Move laser head here** | Right-click the scene grid → move head to click position (`move_absolute`; same coords as **Relocate** tool) |
 | **ESP3D upload filename** | Toolbar **ESP3D Upload+Run** → dialog for SD name (8.3); default from project; overwrite = easy rerun |
@@ -234,7 +236,7 @@ All code changes are in **[Andre6553/meerk40t](https://github.com/Andre6553/meer
 | 4 | **Update image** — bed photo appears on main scene (not grey) |
 | 5 | **Camera Calibration** → **Fine alignment (mm)** if photo is shifted vs bed grid |
 
-**Current fork version:** `0.9.9028` — paste IP/URL connect; v0.9.9027 fixes grey bed (MemoryDC blit), align-offset crash.
+**Current fork version:** `0.9.9034` — Living Hinges **Apply to scene**; Kerf-Test crash fix (v0.9.9033); v0.9.9028 paste IP/URL connect; camera bed overlay fixes through v0.9.9027.
 
 **Paste formats** (Camera Calibration or **Settings → Camera URI** → Connect):
 
@@ -326,6 +328,16 @@ powershell -File scripts\wake-mks-dlc32.ps1 -Ip 192.168.10.90
 4. **Home** (`$HY` → `$HX`).  
 5. **Tools → Parameter-Test** on scrap → **Queue to Spooler** → **Start**.  
 6. Save winning speeds/powers in **Material Manager**.
+
+**Laser tools (Tools → Laser-Tools):**
+
+| Tool | Use |
+|------|-----|
+| **Parameter-Test** | Speed/power grid on scrap → **Queue to Spooler** |
+| **Kerf-Test** | Measure beam width → kerf compensation on Cut ops |
+| **Living Hinges** | Select a rectangle → tune pattern → **Apply to scene** → assign **Cut** |
+
+Living Hinges: the preview is live only in the tool window until you click **Apply to scene** (under the preview panel).
 
 ---
 
