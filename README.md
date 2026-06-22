@@ -189,7 +189,7 @@ Workflow checklist: [`docs/meerk40t/17-meerkat-dlc32-workflow.md`](docs/meerk40t
 
 ## Fork changelog (MeerK40t)
 
-**Current fork:** [Andre6553/meerk40t](https://github.com/Andre6553/meerk40t) — latest entry **v0.9.9034**. Canonical copy also lives at [docs/meerk40t/15-meerkat-local-changes.md](docs/meerk40t/15-meerkat-local-changes.md) (keep in sync when editing).
+**Current fork:** [Andre6553/meerk40t](https://github.com/Andre6553/meerk40t) — latest entry **v0.9.9034**. Canonical copy also lives at [docs/meerk40t/15-meerkat-local-changes.md](docs/meerk40t/15-meerkat-local-changes.md) (keep in sync when editing). The same changelog is on the [fork README](https://github.com/Andre6553/meerk40t#fork-changelog-meerk40t).
 
 All entries are **fork-style edits** in the Meerkat meerk40t/ clone, not upstream MeerK40t releases.
 
