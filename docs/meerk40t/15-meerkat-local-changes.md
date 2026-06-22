@@ -2,6 +2,48 @@
 
 This note records **fork-style edits** made in the Meerkat workspace clone (`meerk40t/`), not upstream MeerK40t releases. Update this file whenever you add or change behavior here.
 
+## 2026-06 — Line tool: click on existing geometry + precise preview (v0.9.9032)
+
+**Files:** `meerk40t/meerk40t/gui/scenewidgets/selectionwidget.py`, `meerk40t/meerk40t/gui/scenewidgets/rectselectwidget.py`, `meerk40t/meerk40t/gui/toolwidgets/toolpointlistbuilder.py`
+
+**Problem:** With the line tool active, clicks on top of an existing (selected) line were intercepted by selection/rect-select widgets, so a new line could not start on existing geometry unless the cursor moved away. While placing the second point, snap preview pulled the rubber-band endpoint away from the cursor (felt like overshoot when zoomed in).
+
+**Fix:**
+- Selection handles and rectangular selection now defer mouse events whenever `active_tool != "none"`.
+- Point-list tools (line/polyline) follow the raw cursor for preview (`move`/`hover`/`leftdown`); snap is applied only on `leftclick` when placing a point.
+
+## 2026-06 — Start new line directly on existing line (v0.9.9031)
+
+**File:** `meerk40t/meerk40t/gui/scenewidgets/elementswidget.py`
+
+**Problem:** After finishing a line, clicking directly on top of an existing line could be consumed as element selection first, so the first point of the next line did not start unless the cursor moved off the line.
+
+**Fix:** `ElementsWidget` no longer consumes `leftclick` for selection while any non-`none` tool is active. This lets line/polyline and other creation tools start exactly on existing geometry.
+
+## 2026-06 — Middle-mouse pan while drawing point tools (v0.9.9030)
+
+**File:** `meerk40t/meerk40t/gui/toolwidgets/toolpointlistbuilder.py`
+
+**Problem:** While drawing with point-based tools (Line/Polyline and related), pressing and dragging the middle mouse button did not pan the scene because move events were consumed by the active tool.
+
+**Fix:** Point-list tools now pass through `move` events when the middle button is held (`m_middle` modifier), so scene panning can work during active drawing without ending the tool.
+
+## 2026-06 — Camera Calibration Enter-key crash fix (v0.9.9029)
+
+**Files:** `meerk40t/meerk40t/camera/gui/cameracal.py`, `meerk40t/meerk40t/camera/gui/camerapanel.py`
+
+**Problem:** Opening **Camera Calibration** crashed: `wxTE_PROCESS_ENTER` required for Enter-key connect on the URI text box.
+
+**Fix:** Camera URI fields created with `wx.TE_PROCESS_ENTER`.
+
+## 2026-06 — Camera paste URL / IP connect (v0.9.9028)
+
+**Files:** `meerk40t/meerk40t/camera/camera.py`, `meerk40t/meerk40t/camera/gui/camerapanel.py`, `meerk40t/meerk40t/camera/gui/cameracal.py`
+
+**Feature:** Users can paste a **USB index**, **full `rtsp://` URL**, **`user:pass@IP`**, or **bare IP** — `normalize_camera_uri()` builds the OpenCV address. **Connect** in **Camera URI** manager and **Camera Calibration** applies it to `camera0` (or chosen index) and saves it in the URI list.
+
+**Andre's setup unchanged:** full URL `rtsp://admin:***@192.168.10.133:8554/stream1` still works as-is; shorthand `admin:***@192.168.10.133:8554/stream1` also works.
+
 ## 2026-06 — Camera align offset crash fix (v0.9.9027)
 
 **File:** `meerk40t/meerk40t/camera/camera.py`

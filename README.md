@@ -229,12 +229,23 @@ All code changes are in **[Andre6553/meerk40t](https://github.com/Andre6553/meer
 | Step | Action |
 |------|--------|
 | 1 | Home (`$HY` then `$HX`); open **Camera** pane or `window open CameraInterface` |
-| 2 | `camera0 uri <index-or-rtsp>` then `camera0 start` (Andre: RTSP IP cam on `192.168.10.133:8554`) |
+| 2 | Paste camera address → **Connect** (see formats below), or `camera0 uri …` then `camera0 start` |
 | 3 | Drag **TL/TR/BR/BL** corners (perspective **off**), then enable **Correct Perspective** |
 | 4 | **Update image** — bed photo appears on main scene (not grey) |
 | 5 | **Camera Calibration** → **Fine alignment (mm)** if photo is shifted vs bed grid |
 
-**Current fork version:** `0.9.9027` — fixes grey bed (MemoryDC blit), align-offset crash, console logging on Update image.
+**Current fork version:** `0.9.9028` — paste IP/URL connect; v0.9.9027 fixes grey bed (MemoryDC blit), align-offset crash.
+
+**Paste formats** (Camera Calibration or **Settings → Camera URI** → Connect):
+
+| You paste | Becomes |
+|-----------|---------|
+| `0` | USB webcam index 0 |
+| `rtsp://user:pass@192.168.10.133:8554/stream1` | unchanged (Andre's IP camera) |
+| `user:pass@192.168.10.133:8554/stream1` | full RTSP URL |
+| `192.168.10.133` | `rtsp://192.168.10.133:8554/profile0` (add user:pass if the cam requires login) |
+
+**Andre's saved URI** stays in `%LOCALAPPDATA%\MeerK40t\MeerK40t.cfg` under `[camera/0]` — no change needed after update.
 
 Detail: [`docs/meerk40t/15-meerkat-local-changes.md`](docs/meerk40t/15-meerkat-local-changes.md) (camera sections from v0.9.9009).
 
