@@ -11,7 +11,7 @@ This folder is **your** reference for asking questions about MeerK40t in Cursor.
 
 Edits to the clone in this workspace (simulation cancel, tips persistence, MKS DLC32 info, etc.) are summarized here:
 
-- **[15-meerkat-local-changes.md](15-meerkat-local-changes.md)** — fork changelog (**full copy on [workspace README](../../README.md#fork-changelog-meerk40t)** and **[meerk40t fork README](https://github.com/Andre6553/meerk40t#fork-changelog-meerk40t)**); Living Hinges Apply to scene v0.9.9034, Kerf-Test fix v0.9.9033, …
+- **[15-meerkat-local-changes.md](15-meerkat-local-changes.md)** — fork changelog (**full copy on [workspace README](../../README.md#fork-changelog-meerk40t)** and **[meerk40t fork README](https://github.com/Andre6553/meerk40t#fork-changelog-meerk40t)**); Rotary Fit text fix v0.9.9038, Rotary Pro v0.9.9035, Living Hinges Apply to scene v0.9.9034, …
 - **[16-mks-dlc32-board.md](16-mks-dlc32-board.md)** — MKS DLC32 specs, GRBL setup, **touch-panel laser test (short beam)**, Cloudray **WP**, motors/Vref, limits.
 - **[19-dlc32-eeprom-settings.md](19-dlc32-eeprom-settings.md)** — **Andre’s confirmed DLC32 EEPROM** (full `$$`; Cursor rule `.cursor/rules/dlc32-eeprom-settings.mdc`).
 - **[17-meerkat-dlc32-workflow.md](17-meerkat-dlc32-workflow.md)** — Learning-phase workflow: Material Test, Material Manager presets, **K40 CO2 — MKS DLC32 (400×285 mm)** device profile, macros, **§8 Wi‑Fi/USB**, **§9 inner shapes not cutting**.
@@ -41,6 +41,7 @@ Edits to the clone in this workspace (simulation cancel, tips persistence, MKS D
 | [17-meerkat-dlc32-workflow.md](17-meerkat-dlc32-workflow.md) | Meerkat DLC32 400×285 workflow, device profile, Material Test / Manager |
 | [18-meerk40t-ui-manual.md](18-meerk40t-ui-manual.md) | MeerK40t UI manual (all major windows, menus, workflow); optional PDF + screenshots |
 | [19-dlc32-eeprom-settings.md](19-dlc32-eeprom-settings.md) | Confirmed GRBL EEPROM + homing/jog direction reference (Andre DLC32) |
+| [20-rotary-pro.md](20-rotary-pro.md) | **Rotary Pro** — diameter/length, Y steps calibration, GRBL hooks (v0.9.9035) |
 
 ## KB status (v1 “done”)
 

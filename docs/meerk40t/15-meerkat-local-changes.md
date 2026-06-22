@@ -4,6 +4,57 @@ This note records **fork-style edits** made in the Meerkat workspace clone (`mee
 
 **Also embedded** in the repository root [`README.md`](../../README.md#fork-changelog-meerk40t) (workspace) and [Andre6553/meerk40t](https://github.com/Andre6553/meerk40t#fork-changelog-meerk40t) — keep all three in sync when you add changelog entries.
 
+## 2026-06 — Rotary: Fit uses native units → mm correctly (v0.9.9040)
+
+**Files:** `meerk40t/meerk40t/rotary/rotary.py`
+
+**Problem:** Fit treated scene bounds as mm but MeerK40t stores them in **native units** (~2580 per mm). It also stripped the normal text matrix `scale(UNITS_PER_PIXEL)`, which blew up font size and triggered false “bounds look wrong” errors on **new** text.
+
+**Fix:** Convert selection size with `UNITS_PER_MM`; only remove **extra** matrix scale (old bugs), always keep `UNITS_PER_PIXEL` on text; use standard `selected_area()` for bounds.
+
+## 2026-06 — Rotary: Fit ignores broken text matrix scale (v0.9.9039)
+
+**Files:** `meerk40t/meerk40t/rotary/rotary.py`
+
+**Problem:** After an earlier bad Fit, text matrix still held huge scale factors, so bounds read as **264000+ mm** and Fit refused with “scale out of range”.
+
+**Fix:** Before measuring for Fit, text matrix scale is **moved into font size** and matrix is reset to **translate only**. Fit uses font metrics + position, not scaled matrix corners.
+
+## 2026-06 — Rotary: Fit selection fixes text (v0.9.9038)
+
+**Files:** `meerk40t/meerk40t/rotary/rotary.py`
+
+**Problem:** **Fit selection to rotary** scaled text by multiplying its matrix. wxPython draws text with `DrawText` + matrix, so scaled text looked like a shattered round blob and could shrink to ~0.04 mm.
+
+**Fix:** Text is scaled via **font size** (and position nudge), not matrix scale. Fit measures text bounds first and refuses selections smaller than 0.5 mm (already broken — use **Undo** or delete and re-add text).
+
+## 2026-06 — Rotary: fix broken scene preview / text (v0.9.9037)
+
+**Files:** `meerk40t/meerk40t/rotary/rotary.py`, `meerk40t/meerk40t/grbl/driver.py`
+
+**Problem:** With Rotary-Mode on, text/art looked shattered or circular on the scene (distorted view matrix from scale + mirror on `device.view`).
+
+**Fix:** Scene stays normal **1:1 mm**. Rotary wrap/steps/mirror apply only when sending G-code (driver). **Restart MeerK40t** after update; use **Undo** if art was already scaled oddly.
+
+## 2026-06 — Rotary: Fit selection button in settings window (v0.9.9036)
+
+**Files:** `meerk40t/meerk40t/rotary/rotary.py`, `meerk40t/meerk40t/rotary/gui/rotarysettings.py`
+
+**Feature:** **Fit selection to rotary** button in Rotary-Settings (shared logic with console `rotaryfit`). Select artwork → click to scale into length × circumference.
+
+## 2026-06 — Rotary Pro: diameter, steps calibration, GRBL hooks (v0.9.9035)
+
+**Files:** `meerk40t/meerk40t/rotary/rotary.py`, `meerk40t/meerk40t/rotary/rotary_cam.py`, `meerk40t/meerk40t/grbl/driver.py`, `meerk40t/meerk40t/rotary/gui/rotarysettings.py`
+
+**Feature:** Y-motor-swap chuck rotary for GRBL/DLC32:
+
+- **Object:** outside diameter, usable length, auto wrap Y-scale (π×D ÷ bed height).
+- **Y steps:** flat-bed `$101` (default 159.6), rotary steps/mm, **software compensate** (default) or optional **write `$101` at job start** with restore after job.
+- **Homing:** ignore G28 (default on); physical home → **$HX only** or blocked.
+- **Console:** `rotary`, `rotaryfit`, `rotarycal`, `rotarysuggest`.
+
+**Doc:** [20-rotary-pro.md](20-rotary-pro.md). Leave **Rotary-Mode off** until Y motor is on the chuck.
+
 ## 2026-06 — Living Hinges: Apply to scene button visible (v0.9.9034)
 
 **File:** `meerk40t/meerk40t/tools/livinghinges.py`
