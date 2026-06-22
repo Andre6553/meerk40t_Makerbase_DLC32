@@ -172,7 +172,7 @@ You should see the beam during the **G1** line. If that works but a full job doe
 
 | Feature | Status |
 |---------|--------|
-| Camera overlay | Skip until you need engrave-on-objects alignment |
+| Camera overlay | **Camera Calibration** window (v0.9.9009) — perspective + bed background |
 | LightBurn `.lbrn` | Not integrated |
 | Print & Cut | Not integrated |
 

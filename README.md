@@ -216,11 +216,35 @@ All code changes are in **[Andre6553/meerk40t](https://github.com/Andre6553/meer
 | **Keyboard Delete** | Delete / numpad Del matches ribbon Delete on canvas |
 | **Bed movement limit default** | “Limit laser movement to bed size” on at startup; warning if disabled |
 | **Simulation cancel** | **Stop calculating** during preview build |
+| **CSV Batch Run** | Import CSV → preview rows → spool jobs one-by-one (v0.9.9004+) |
+| **Camera Calibration & bed overlay** | Perspective corners, **Update image**, fine alignment mm (v0.9.9009–9027) |
 | **Tips persistence** | “Show tips at startup” saves immediately |
 | **Ribbon delayed tooltips** | Long-hover help on ribbon buttons |
 | **Scene startup crash fix** | No crash on 0×0 window before layout |
 | **Move laser head here** | Right-click the scene grid → move head to click position (`move_absolute`; same coords as **Relocate** tool) |
 | **ESP3D upload filename** | Toolbar **ESP3D Upload+Run** → dialog for SD name (8.3); default from project; overwrite = easy rerun |
+
+### Camera calibration & bed overlay (v0.9.9009–0.9.9027)
+
+| Step | Action |
+|------|--------|
+| 1 | Home (`$HY` then `$HX`); open **Camera** pane or `window open CameraInterface` |
+| 2 | `camera0 uri <index-or-rtsp>` then `camera0 start` (Andre: RTSP IP cam on `192.168.10.133:8554`) |
+| 3 | Drag **TL/TR/BR/BL** corners (perspective **off**), then enable **Correct Perspective** |
+| 4 | **Update image** — bed photo appears on main scene (not grey) |
+| 5 | **Camera Calibration** → **Fine alignment (mm)** if photo is shifted vs bed grid |
+
+**Current fork version:** `0.9.9027` — fixes grey bed (MemoryDC blit), align-offset crash, console logging on Update image.
+
+Detail: [`docs/meerk40t/15-meerkat-local-changes.md`](docs/meerk40t/15-meerkat-local-changes.md) (camera sections from v0.9.9009).
+
+### CSV Batch Run (v0.9.9004+)
+
+Personalize many items from a CSV (name tags, serials, etc.) using MeerK40t **wordlists**:
+
+- **Settings → CSV Batch Run** or `window open BatchRun`
+- Import CSV, map columns to `{variables}`, preview, **Start batch**
+- Spooler advances to the next row when each job completes (abort no longer auto-advances — v0.9.9006+)
 
 ### EEPROM docs
 

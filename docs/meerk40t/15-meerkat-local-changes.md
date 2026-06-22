@@ -2,6 +2,219 @@
 
 This note records **fork-style edits** made in the Meerkat workspace clone (`meerk40t/`), not upstream MeerK40t releases. Update this file whenever you add or change behavior here.
 
+## 2026-06 — Camera align offset crash fix (v0.9.9027)
+
+**File:** `meerk40t/meerk40t/camera/camera.py`
+
+**Problem:** Crash on scene refresh after Update image: `AttributeError: 'Context' object has no attribute 'align_offset_scene_units'` — `camera_align_offsets_for_context` used `kernel.get_context("camera/N")` which can return a plain Context stub, not the Camera service.
+
+**Fix:** `_camera_service_for_index()` resolves the real Camera service from `kernel.services("camera")` by path; skips non-Camera contexts. Composite path wraps offset lookup in try/except.
+
+## 2026-06 — Camera bed photo MemoryDC composite (v0.9.9026)
+
+**Files:** `meerk40t/meerk40t/gui/scene/scene.py`, `meerk40t/meerk40t/camera/camera.py`, `meerk40t/meerk40t/gui/scenewidgets/bedwidget.py`
+
+**Problem:** Console still reported success with 1 bed widget but main scene stayed grey — `GraphicsContext.DrawBitmap` inside the scene layer cache does not paint reliably on Windows.
+
+**Fix:** After the background layer is drawn, `composite_bed_photo_on_device_dc()` blits the bed photo with `MemoryDC.DrawBitmap` in device pixels. Bed widget skips the GC bitmap path. Console logs center-pixel RGB to confirm the frame has real image data.
+
+## 2026-06 — Camera bed photo draw fix (v0.9.9025)
+
+**Files:** `meerk40t/meerk40t/gui/scenewidgets/bedwidget.py`, `meerk40t/meerk40t/camera/camera.py`
+
+**Problem:** Console reported `Bed background applied` but main scene stayed **grey** — camera bitmap was stored but not painted (Hide Background draw mode and/or `GraphicsContext.DrawBitmap` failing on Windows).
+
+**Fix:** Bed widget **always draws** a stored camera bitmap (not gated by Hide Background). Pre-scales bitmap to screen pixels before draw; falls back to `CreateBitmapFromImage`. Clears Hide Background on root + scene contexts; `wx.CallAfter` refresh. Console shows bed widget count.
+
+## 2026-06 — Camera bed apply crash fix (v0.9.9024)
+
+**Files:** `meerk40t/meerk40t/camera/camera.py`
+
+**Problem:** **Update image** crashed with `NameError: name '_' is not defined` in `push_bed_background_bitmap` right after the bed bitmap was built (v0.9.9023).
+
+**Fix:** Module-level messages use `kernel.translation`; `Camera.background()` uses `self._()`.
+
+## 2026-06 — Camera Update Image console messages fix (v0.9.9023)
+
+**Files:** `meerk40t/meerk40t/camera/camera.py`, `meerk40t/meerk40t/camera/gui/camerapanel.py`
+
+**Problem:** **Update image** appeared to do nothing — messages used `self.channel("the message")` (wrong API) or the **camera** channel only, so nothing showed in the **Console** pane. `CameraInterface` passed the wrong context to `CameraPanel`.
+
+**Fix:** `camera_user_log()` writes to **console** and **camera** channels. **Update image** calls `camera.background()` (same as right-click **Update Background**). Clear errors when the camera is **stopped**. `CameraInterface` uses **root** context like the docked camera pane.
+
+## 2026-06 — Camera bed background direct widget apply (v0.9.9022)
+
+**Files:** `meerk40t/meerk40t/camera/camera.py`, `meerk40t/meerk40t/gui/scenewidgets/bedwidget.py`, `meerk40t/meerk40t/gui/wxmscene.py`, `meerk40t/meerk40t/camera/gui/camerapanel.py`
+
+**Problem:** On v0.9.9021 the bed stayed **grey** after **Update image** — background signal did not reliably land on the bed widget; large full-res bitmaps could fail to draw on Windows.
+
+**Fix:** `_apply_bed_background_to_scene()` sets the bitmap on every `BedWidget` directly (simulation-style path). Perspective warp capped at **1280 px** long edge. Bed draw tries `CreateBitmapFromImage` fallback. Console reports `Bed background applied (W x H px)` or a clear error.
+
+## 2026-06 — Camera bed background direct scene push (v0.9.9021)
+
+**Files:** `meerk40t/meerk40t/camera/camera.py`, `meerk40t/meerk40t/camera/gui/camerapanel.py`, `meerk40t/meerk40t/gui/scenewidgets/bedwidget.py`
+
+**Problem:** **Update image** still left a **grey** bed — background signal did not always reach the bed widget; bitmap build via `FromBuffer` was unreliable on Windows.
+
+**Fix:** `push_bed_background_bitmap()` builds the bitmap with `wx.Image.SetData`, pushes it **directly** to the main scene bed widget (not only via kernel signal), clears **Hide Background** draw mode, and refreshes. Bed image stored under device label and `__default__` fallback.
+
+## 2026-06 — Camera bed background grey regression fix (v0.9.9020)
+
+**Files:** `meerk40t/meerk40t/camera/camera.py`, `meerk40t/meerk40t/camera/gui/camerapanel.py`, `meerk40t/meerk40t/gui/scenewidgets/bedwidget.py`, `meerk40t/meerk40t/gui/wxmscene.py`
+
+**Problem:** After v0.9.9019, **Update image** showed a **solid grey** bed again. v0.9.9019 bed pre-scaling used scene units (mm) as pixel sizes; shallow bitmap copies could be invalidated when the camera thread refreshed the live frame.
+
+**Fix:** Reverted bed pre-scaling — `DrawBitmap` scales the photo to the bed rect. New `make_bed_bitmap_from_frame()` builds an **owned** wx bitmap from RGB bytes. Camera stream size is synced into `width`/`height` each frame so perspective warp stays at full resolution without the broken scale step.
+
+## 2026-06 — Camera bed background full resolution (v0.9.9019)
+
+**Files:** `meerk40t/meerk40t/camera/camera.py`, `meerk40t/meerk40t/camera/gui/camerapanel.py`, `meerk40t/meerk40t/gui/scenewidgets/bedwidget.py`
+
+**Problem:** Bed overlay looked **grainy / black-and-white** — perspective warp output was forced to **640×480** then stretched across the full bed.
+
+**Fix:** Perspective correction now keeps the **live camera resolution** (e.g. 1920×1080). Bed draw uses **high-quality scaling** when fitting the photo to the bed.
+
+## 2026-06 — Camera Update Image uses live bitmap (v0.9.9018)
+
+**Files:** `meerk40t/meerk40t/camera/gui/camerapanel.py`, `meerk40t/meerk40t/camera/camera.py`, `meerk40t/meerk40t/gui/wxmscene.py`, `meerk40t/meerk40t/gui/simulation.py`
+
+**Problem:** **Update image** still filled the bed with **solid grey** — frame buffer conversion failed (non-uint8 / wrong buffer type).
+
+**Fix:** **Update image** now copies the **same wx bitmap** already shown in the camera window to the main scene. `camera background` console path forces **uint8 RGB** before `FromBuffer`. Console confirms `Bed background updated (W x H px).`
+
+## 2026-06 — Camera Update Image grey bed fix (v0.9.9017)
+
+**Files:** `meerk40t/meerk40t/camera/camera.py`, `meerk40t/meerk40t/gui/wxmscene.py`, `meerk40t/meerk40t/gui/scenewidgets/bedwidget.py`, `meerk40t/meerk40t/camera/gui/camerapanel.py`
+
+**Problem:** **Update image** on the camera window left the main scene **grey** (no bed photo).
+
+**Fix:** Safer RGB buffer for `wx.Bitmap.FromBuffer`; bed draw handles **negative height** (top-left / Flip Y); background stored even if device label was missing; **Show Background** draw mode turned on when updating; console message if no camera frame yet.
+
+## 2026-06 — Camera Calibration window shows Fine alignment (v0.9.9016)
+
+**Files:** `meerk40t/meerk40t/camera/gui/cameracal.py`
+
+**Fix:** **Fine alignment (mm)** was hidden when the window kept an old saved size. Window now auto-grows to fit; section lives inside **Actions**. Close and reopen **Camera Calibration** after update.
+
+## 2026-06 — Camera fine alignment offset (v0.9.9015)
+
+**Files:** `meerk40t/meerk40t/camera/camera.py`, `meerk40t/meerk40t/camera/gui/cameracal.py`, `meerk40t/meerk40t/gui/scenewidgets/bedwidget.py`
+
+**Feature:** **Fine alignment (mm)** in **Camera Calibration** — `align_offset_x` / `align_offset_y` per camera shift the bed photo on the main scene without changing GRBL steps/mm. **Overlay ←/→/↑/↓** nudges 1 mm; spinners for exact values; **Apply offset** / **Reset offset**.
+
+## 2026-06 — Camera flip crash fix (v0.9.9014)
+
+**Files:** `meerk40t/meerk40t/camera/camera.py`, `meerk40t/meerk40t/camera/gui/camerapanel.py`
+
+**Problem:** **Flip 180°** / flip toggles crashed with `TypeError: 'NoneType' object is not subscriptable` — `reset_perspective()` cleared corners before the UI redrew.
+
+**Fix:** `ensure_perspective()` re-initializes default TL/TR/BR/BL corners from the live (oriented) frame size immediately after flip or reset.
+
+## 2026-06 — Camera flip horizontal / vertical / 180° (v0.9.9013)
+
+**Files:** `meerk40t/meerk40t/camera/camera.py`, `meerk40t/meerk40t/camera/gui/camerapanel.py`, `meerk40t/meerk40t/camera/gui/cameracal.py`
+
+**Change:** IP camera feed can be **flipped** so on-screen TL/TR/BR/BL match the physical bed (e.g. upside-down mount where TL appeared at BR). Settings: `flip_x`, `flip_y` on each camera. **Camera right-click** → Flip horizontal / Flip vertical / **Flip 180°**. **Camera Calibration** window → **Flip camera 180°** (resets perspective corners). Toggling flip resets perspective so corners are re-dragged on the corrected image.
+
+## 2026-06 — Camera perspective corner markers easier to see (v0.9.9012)
+
+**Files:** `meerk40t/meerk40t/camera/gui/camerapanel.py`, `meerk40t/meerk40t/camera/gui/cameracal.py`
+
+**Change:** Perspective calibration handles are now **large filled circles** (56 px hit area) with **white outline**, **TL/TR/BR/BL labels**, and a **yellow dashed** bed outline. Markers stay visible even when camera **Aspect** is on (only hidden when **Correct Perspective** is on).
+
+## 2026-06 — Camera Calibration startup recursion fix (v0.9.9011)
+
+**Files:** `meerk40t/meerk40t/camera/gui/cameracal.py`, `meerk40t/meerk40t/camera/gui/gui.py`, `meerk40t/meerk40t/main.py`
+
+**Problem:** Startup **RecursionError** — `sub_register` called `kernel.register("window/CameraCalib", …)` which called `sub_register` again in a loop.
+
+**Fix:** Register the window once in `gui.py` (like `BatchRun` in `wxmeerk40t.py`); `sub_register` only registers the ribbon button.
+
+## 2026-06 — Camera Calibration startup crash fix (v0.9.9010)
+
+**Files:** `meerk40t/meerk40t/camera/gui/cameracal.py`, `meerk40t/meerk40t/main.py`
+
+**Problem:** MeerK40t crashed on startup with `ImportError: cannot import name 'wxSpinCtrl' from meerk40t.gui.wxutils`.
+
+**Fix:** Use `wx.SpinCtrl` directly (same as CSV Batch Run and other panels).
+
+## 2026-06 — Camera Calibration helper (v0.9.9009)
+
+**Files:** `meerk40t/meerk40t/camera/gui/cameracal.py` (new), `meerk40t/meerk40t/camera/gui/gui.py`, `meerk40t/meerk40t/gui/wxmmain.py`, `meerk40t/meerk40t/main.py`
+
+**Feature:** Guided **camera bed calibration** — perspective corners, background overlay, corner test marks.
+
+**Open:** **Settings → Camera Calibration**, ribbon **Preparation → Camera Calib**, or `window open CameraCalib`.
+
+**Workflow:** Home machine → open camera → drag four corner markers (perspective OFF) → Correct Perspective ON → link DLC32 device (camera right-click) → **Update background** → **Add corner test marks** → low-power cut test.
+
+## 2026-06 — Abort button crash after async estop (v0.9.9008)
+
+**Files:** `meerk40t/meerk40t/gui/wxutils.py`, `meerk40t/meerk40t/gui/spoolerpanel.py`, `meerk40t/meerk40t/gui/laserpanel.py`, `meerk40t/meerk40t/main.py`
+
+**Problem:** After **Abort**, crash: `RuntimeError: wrapped C/C++ object of type HoverButton has been deleted` when re-enabling the Stop button via `wx.CallAfter`.
+
+**Fix:** `safe_enable_control()` ignores deleted widgets; `HoverButton.Enable()` catches `RuntimeError`.
+
+## 2026-06 — Spooler Abort freeze fix v2 (v0.9.9007)
+
+**Files:** `meerk40t/meerk40t/grbl/driver.py`, `meerk40t/meerk40t/core/spoolers.py`, `meerk40t/meerk40t/gui/spoolerpanel.py`, `meerk40t/meerk40t/gui/laserpanel.py`, `meerk40t/meerk40t/main.py`
+
+**Problem:** Job Spooler still froze on **Abort** — especially during **raster** jobs.
+
+**Root cause (v2):** `plot_start()` raster / PlotCut loops only checked `hold_work()` (pause/buffer), **not** abort. A stopped job could keep queuing millions of G-code points on the spooler thread while the UI ran `estop` synchronously.
+
+**Fix:**
+
+- Abort check on **every raster / PlotCut point**; skip `wait_finish()` when aborted.
+- `clear_queue()` sets **`_user_aborted` immediately**, stops jobs under lock, logs **after** releasing lock.
+- **Abort** on Job Spooler + Laser tab runs **`estop` on a worker thread** (UI stays responsive).
+- Job Spooler list no longer calls **`calc_steps()`** on **Running** jobs (was blocking the UI).
+
+## 2026-06 — Spooler Abort freeze fix (v0.9.9006)
+
+**Files:** `meerk40t/meerk40t/grbl/controller.py`, `meerk40t/meerk40t/grbl/driver.py`, `meerk40t/meerk40t/core/spoolers.py`, `meerk40t/meerk40t/gui/batchrun.py`, `meerk40t/meerk40t/main.py`
+
+**Problem:** **Abort** / **Stop** often left MeerK40t “Not responding” — especially on GRBL/Wi‑Fi and during **CSV Batch Run**.
+
+**Causes:**
+
+1. Soft reset (`0x18`) cleared the send queue but **not** the forward buffer waiting for `ok` — spooler thread could spin in `wait_finish()` / `plot_start()`.
+2. **clear_queue** fired **`spooler;completed` once per queued job**, flooding UI updates.
+3. **CSV Batch Run** treated abort as “job finished” and could **spool the next CSV row** immediately.
+
+**Fix:**
+
+- On estop reset: send **`0x18` first**, clear forward buffer, stop jobs, exit plot loops when aborted.
+- New signal **`spooler;aborted`**; one **`spooler;completed`** after clear (not N times).
+- Batch window listens for **`spooler;aborted`** and stops the chain.
+
+## 2026-06 — CSV Batch Run open crash fix (v0.9.9005)
+
+**Files:** `meerk40t/meerk40t/gui/batchrun.py`, `meerk40t/meerk40t/main.py`
+
+**Problem:** Opening **CSV Batch Run** crashed with `RuntimeError: wrapped C/C++ object of type BoxSizer has been deleted` in `restore_aspect()`.
+
+**Fix:** Build UI on `self.sizer` from `MWindow` (same as Wordlist Editor) instead of calling `SetSizer()` with a new box sizer.
+
+## 2026-06 — CSV Batch Run (v0.9.9004)
+
+**Files:** `meerk40t/meerk40t/gui/batchrun.py` (new), `meerk40t/meerk40t/gui/wxmeerk40t.py`, `meerk40t/meerk40t/gui/wxmmain.py`, `meerk40t/meerk40t/main.py`
+
+**Feature:** LightBurn-style **batch personalization** from CSV wordlist data — no camera required.
+
+**Open:** **Settings → CSV Batch Run**, ribbon **Preparation → CSV Batch**, or console `window open BatchRun`.
+
+**Workflow:**
+
+1. Design text with `{column}` placeholders (CSV header names, lowercased).
+2. **Import** a CSV (Auto / Data / Headers first row).
+3. **Prev / Next** or spin control to preview each row; scene text updates via wordlist.
+4. **Run current row** — spools one job for the active row.
+5. **Run all rows** — runs row 1, then auto-advances after each **`spooler;completed`** until done or **Stop batch**.
+
+**Notes:** Arm the laser before batch run if your device profile requires it. Uses existing wordlist CSV engine (`wordlist load` compatible). For camera overlay see **Camera Calibration** (v0.9.9009).
+
 ## 2026-06 — Plan Export: no UI freeze on large jobs (v0.9.9003)
 
 **Files:** `meerk40t/meerk40t/gui/laserpanel.py`, `meerk40t/meerk40t/grbl/device.py`, `meerk40t/meerk40t/grbl/esp3d_upload.py`, `meerk40t/meerk40t/main.py`
